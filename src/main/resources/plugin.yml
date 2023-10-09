@@ -1,0 +1,9 @@
+name: Aula
+version: '${version}'
+main: net.gahvila.aula.Aula
+api-version: 1.19
+authors: [ Jokni ]
+commands:
+  latauspalvelin:
+  teema:
+  palvelinvalikko:
