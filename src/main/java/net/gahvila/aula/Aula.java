@@ -4,7 +4,6 @@ import net.gahvila.aula.Commands.FileserverDetails;
 import net.gahvila.aula.Events.*;
 import net.gahvila.aula.PlayerFeatures.AntiGrief;
 import net.gahvila.aula.PlayerFeatures.ServerSelector;
-import net.gahvila.aula.PlayerFeatures.Themes;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -19,11 +18,10 @@ public final class Aula extends JavaPlugin {
         pluginManager = Bukkit.getPluginManager();
         instance = this;
 
-        registerListeners(new PlayerJoin(), new PlayerMove(), new PlayerInteract(), new PlayerLeave(), new Themes(), new AntiGrief(), new ServerSelector());
+        registerListeners(new PlayerJoin(), new PlayerMove(), new PlayerInteract(), new PlayerLeave(), new AntiGrief(), new ServerSelector());
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        getCommand("teema").setExecutor(new Themes());
         getCommand("latauspalvelin").setExecutor(new FileserverDetails());
         getCommand("palvelinvalikko").setExecutor(new ServerSelector());
 

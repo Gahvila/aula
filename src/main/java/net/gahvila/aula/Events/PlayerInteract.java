@@ -29,17 +29,6 @@ public class PlayerInteract implements Listener {
                     e.setCancelled(true);
                     p.performCommand("palvelinvalikko");
                 }
-                if (e.getItem().hasItemMeta() && e.getItem().getItemMeta().getDisplayName().equals("§8> §6§lTeema §8<")) {
-                    e.setCancelled(true);
-                    p.performCommand("teema");
-                }
-
-                if (e.getItem().hasItemMeta() && e.getItem().getItemMeta().getDisplayName().equals("§8> §6§lMusiikki §8<")) {
-                    cooldown.put(p.getUniqueId(), System.currentTimeMillis());
-                    Bukkit.getScheduler().runTaskLater(Aula.instance, () -> cooldown.remove(p.getUniqueId()), 25);
-                    e.setCancelled(true);
-                    p.performCommand("music");
-                }
             }
         }
     }

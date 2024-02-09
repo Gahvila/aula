@@ -16,10 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.geysermc.cumulus.SimpleForm;
-import org.geysermc.cumulus.response.SimpleFormResponse;
-import org.geysermc.floodgate.api.FloodgateApi;
-import org.geysermc.floodgate.api.player.FloodgatePlayer;
+
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,11 +28,7 @@ public class ServerSelector implements CommandExecutor, Listener {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player p = (Player) sender;
-        if (!FloodgateApi.getInstance().isFloodgatePlayer(p.getUniqueId())){
-            openGui((Player) sender);
-        }else{
-            bedrockGui(p);
-        }
+        openGui((Player) sender);
         return true;
     }
 
@@ -83,30 +76,5 @@ public class ServerSelector implements CommandExecutor, Listener {
                     break;
             }
         }
-    }
-
-    public static void bedrockGui(Player p){
-        FloodgatePlayer floodgatePlayer = FloodgateApi.getInstance().getPlayer(p.getUniqueId());
-        floodgatePlayer.sendForm(
-                SimpleForm.builder()
-                        .title("§9§lPalvelinvalikko")
-                        .content("Valitse pelimuoto klikkaamalla")
-                        .button("§a§lSurvival") // id = 0
-                        .button("§6§lLuova") // id = 1
-                        .responseHandler((form, responseData) -> {
-                            SimpleFormResponse response = form.parseResponse(responseData);
-                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                            out.writeUTF("Connect");
-                            switch (response.getClickedButtonId()) {
-                                case 0:
-                                    out.writeUTF("survival");
-                                    p.sendPluginMessage(Aula.instance, "BungeeCord", out.toByteArray());
-                                    break;
-                                case 1:
-                                    out.writeUTF("luova");
-                                    p.sendPluginMessage(Aula.instance, "BungeeCord", out.toByteArray());
-                                    break;
-                            }
-                        }));
     }
 }
