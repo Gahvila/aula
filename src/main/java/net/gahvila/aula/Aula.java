@@ -27,6 +27,7 @@ public final class Aula extends JavaPlugin {
 
         //CONFIG
         getConfig().options().copyDefaults();
+        Bukkit.getServerTickManager().setTickRate(40);
     }
 
     @Override

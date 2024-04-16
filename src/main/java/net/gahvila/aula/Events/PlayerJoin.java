@@ -3,6 +3,7 @@ package net.gahvila.aula.Events;
 import net.gahvila.aula.Aula;
 import net.gahvila.aula.PlayerFeatures.ServerSelector;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.network.protocol.game.ClientboundTickingStatePacket;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import static java.lang.Integer.MAX_VALUE;
 import static org.bukkit.Bukkit.getServer;
