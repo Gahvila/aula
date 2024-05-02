@@ -5,67 +5,40 @@
 plugins {
     java
     `maven-publish`
-    id("io.papermc.paperweight.userdev") version "1.5.11"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
-
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
 repositories {
     mavenLocal()
-    maven {
-        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    mavenCentral()
+    maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+        name = "sonatype-oss-snapshots"
     }
-
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
-    }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
-
-    maven {
-        url = uri("https://libraries.minecraft.net/")
-    }
-    maven {
-        url = uri("https://repo.codemc.org/repository/maven-public/")
     }
 }
 
 dependencies {
-    //paper
-    paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
 }
 
 group = "Aula"
 version = "2.0"
 description = "Aula"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
     }
 }
-
-
 tasks {
+    compileJava {
+        options.release = 21
+    }
     withType<JavaCompile> {
         options.encoding = "UTF-8"
-    }
-    build {
-        dependsOn(reobfJar)
-    }
-    assemble {
-        dependsOn(reobfJar)
-    }
-
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
-        }
     }
 }

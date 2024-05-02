@@ -2,10 +2,14 @@ package net.gahvila.aula;
 
 import net.gahvila.aula.Commands.FileserverDetails;
 import net.gahvila.aula.Events.*;
-import net.gahvila.aula.PlayerFeatures.AntiGrief;
+import net.gahvila.aula.Global.TimeSync;
 import net.gahvila.aula.PlayerFeatures.ServerSelector;
+import net.gahvila.aula.Utils.EmptyChunkGenerator;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.World;
 import org.bukkit.event.Listener;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,7 +22,10 @@ public final class Aula extends JavaPlugin {
         pluginManager = Bukkit.getPluginManager();
         instance = this;
 
-        registerListeners(new PlayerJoin(), new PlayerMove(), new PlayerInteract(), new PlayerLeave(), new AntiGrief(), new ServerSelector());
+        TimeSync timeSync = new TimeSync();
+        timeSync.timeSyncScheduler();
+
+        registerListeners(new PlayerJoin(), new ServerSelector());
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
@@ -27,7 +34,6 @@ public final class Aula extends JavaPlugin {
 
         //CONFIG
         getConfig().options().copyDefaults();
-        Bukkit.getServerTickManager().setTickRate(40);
     }
 
     @Override
@@ -39,5 +45,10 @@ public final class Aula extends JavaPlugin {
         for(Listener listener : listeners){
             pluginManager.registerEvents(listener, this);
         }
+    }
+
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return new EmptyChunkGenerator();
     }
 }
