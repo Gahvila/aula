@@ -5,6 +5,7 @@
 plugins {
     java
     `maven-publish`
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -18,10 +19,25 @@ repositories {
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
+    maven {
+        url = uri("https://repo.codemc.io/repository/maven-releases/")
+    }
+    maven {
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
+    compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
     compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+    implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
+    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.14-SNAPSHOT")
+    implementation ("com.github.retrooper.packetevents:spigot:2.2.1")
+
+    //commandapi
+    compileOnly("dev.jorel:commandapi-annotations:9.4.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.4.0")
+    annotationProcessor("dev.jorel:commandapi-annotations:9.4.0")
 }
 
 group = "Aula"
@@ -40,5 +56,19 @@ tasks {
     }
     withType<JavaCompile> {
         options.encoding = "UTF-8"
+    }
+    assemble {
+        dependsOn(shadowJar)
+    }
+    shadowJar {
+        archiveFileName.set("${rootProject.name}-${version}.jar")
+        dependencies {
+            include(dependency("dev.jorel:commandapi-bukkit-shade:9.4.0"))
+            include(dependency("com.github.DaJokni:simplixstorage:-SNAPSHOT"))
+            include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.14-SNAPSHOT"))
+        }
+        relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
+        relocate("de.leonhard.storage", "net.gahvila.survival.shaded.storage")
+        relocate ("com.github.stefvanschie.inventoryframework", "net.gahvila.aula.shaded.inventoryframework")
     }
 }

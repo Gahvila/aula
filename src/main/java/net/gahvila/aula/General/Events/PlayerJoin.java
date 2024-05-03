@@ -1,4 +1,4 @@
-package net.gahvila.aula.Events;
+package net.gahvila.aula.General.Events;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
