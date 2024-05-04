@@ -15,7 +15,7 @@ public class AulaAdminCommand {
     }
 
     public void registerCommands() {
-        new CommandAPICommand("lobbyadmin")
+        new CommandAPICommand("adminaula")
                 .withPermission("aula.admin")
                 .withSubcommand(new CommandAPICommand("setspawn")
                         .executesPlayer((p, args) -> {

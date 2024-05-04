@@ -50,7 +50,7 @@ public final class Aula extends JavaPlugin implements Listener{
 
         //listeners
         registerListeners(this, new PlayerJoin(), new ServerSelector(), new SpawnTeleport(teleportManager),
-                new MusicEvents(musicManager));
+                new MusicEvents(musicManager), new PlayerDamage());
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         //commands

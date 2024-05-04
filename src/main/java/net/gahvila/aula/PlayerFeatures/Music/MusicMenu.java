@@ -98,7 +98,7 @@ public class MusicMenu {
             String songName = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
             Song song = musicManager.getSong(songName);
             if (songName != null && song != null){
-                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, MAX_VALUE, 1F);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
                 musicManager.clearSongPlayer(player);
 
                 RadioSongPlayer rsp = new RadioSongPlayer(song);
@@ -160,7 +160,7 @@ public class MusicMenu {
 
     public void progressBar(Player player, RadioSongPlayer rsp) {
         double length = rsp.getSong().getLength();
-        BossBar progressBar = BossBar.bossBar(toMM(rsp.getSong().getTitle()), 0f, BossBar.Color.YELLOW, BossBar.Overlay.PROGRESS);
+        BossBar progressBar = BossBar.bossBar(toMM("<aqua>" + rsp.getSong().getOriginalAuthor() + " - " + rsp.getSong().getTitle() + "</aqua>"), 0f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS);
         player.showBossBar(progressBar);
         Bukkit.getScheduler().runTaskTimerAsynchronously(instance, task -> {
             double progress = (double) rsp.getTick() / length;
