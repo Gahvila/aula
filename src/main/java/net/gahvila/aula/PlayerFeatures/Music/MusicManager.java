@@ -6,10 +6,7 @@ import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 import static net.gahvila.aula.Aula.instance;
 
@@ -19,8 +16,8 @@ public class MusicManager {
     }
 
     public static ArrayList<Song> songs = new ArrayList<>();
-    public static Map<String, Song> namedSong = new HashMap<>();
-    public static Map<Player, RadioSongPlayer> songPlayers = new HashMap<>();
+    public static HashMap<String, Song> namedSong = new HashMap<>();
+    public static HashMap<Player, RadioSongPlayer> songPlayers = new HashMap<>();
 
     public void loadSongs() {
         if (songs != null) songs.clear();
@@ -33,6 +30,8 @@ public class MusicManager {
             songs.add(song);
             namedSong.put(song.getTitle(), song);
         }
+
+        songs.sort((song1, song2) -> song1.getTitle().compareToIgnoreCase(song2.getTitle()));
     }
 
     public ArrayList<Song> getSongs() {
@@ -52,13 +51,5 @@ public class MusicManager {
         RadioSongPlayer songPlayer = songPlayers.get(player);
         songPlayer.destroy();
         songPlayers.remove(player);
-    }
-
-    public String getSongName(Song song){
-        return song.getTitle();
-    }
-
-    public String getSongAuthor(Song song){
-        return song.getOriginalAuthor();
     }
 }

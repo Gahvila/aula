@@ -15,16 +15,17 @@ public class AulaAdminCommand {
     }
 
     public void registerCommands() {
-        new CommandAPICommand("adminaula")
+        new CommandAPICommand("lobbyadmin")
                 .withPermission("aula.admin")
                 .withSubcommand(new CommandAPICommand("setspawn")
                         .executesPlayer((p, args) -> {
                             teleportManager.saveTeleport("spawn", p.getLocation());
                             p.sendMessage("Asetit spawnin uuden sijainnin.");
                         }))
-                .withSubcommand(new CommandAPICommand("reload")
+                .withSubcommand(new CommandAPICommand("musicreload")
                         .executesPlayer((p, args) -> {
                             musicManager.loadSongs();
+                            p.sendMessage("Ladattu musiikit uudelleen.");
                         }))
                 .register();
     }

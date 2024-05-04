@@ -1,5 +1,6 @@
 package net.gahvila.aula.PlayerFeatures.Music;
 
+import com.destroystokyo.paper.MaterialTags;
 import com.github.stefvanschie.inventoryframework.adventuresupport.ComponentHolder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
@@ -13,17 +14,19 @@ import com.xxmicloxx.NoteBlockAPI.model.playmode.ChannelMode;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.StereoMode;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Float.MAX_VALUE;
 import static net.gahvila.aula.Aula.instance;
@@ -32,6 +35,8 @@ import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
 
 public class MusicMenu {
     private final MusicManager musicManager;
+
+    public static ArrayList<Player> cooldown = new ArrayList<>();
 
 
     public MusicMenu(MusicManager musicManager) {
@@ -62,12 +67,20 @@ public class MusicMenu {
         PaginatedPane pages = new PaginatedPane(1, 1, 7, 3);
         List<ItemStack> items = new ArrayList<>();
         NamespacedKey key = new NamespacedKey(instance, "aula");
+
+        ArrayList<Material> discs = new ArrayList<>(MaterialTags.MUSIC_DISCS.getValues());
+        discs.remove(Material.MUSIC_DISC_11);
+
         if (!musicManager.getSongs().isEmpty()){
+            Random random = new Random();
             for (Song song : musicManager.getSongs()) {
-                ItemStack item = new ItemStack(Material.MUSIC_DISC_STAL);;
+                Material randomDisc = discs.get(random.nextInt(discs.size()));
+                ItemStack item = new ItemStack(randomDisc);;
                 ItemMeta meta = item.getItemMeta();
                 meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, song.getTitle());
                 meta.displayName(toUndecoratedMM("<white>" + song.getTitle()));
+                meta.lore(List.of(toUndecoratedMM("<gray>" + song.getOriginalAuthor())));
+                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                 item.setItemMeta(meta);
                 items.add(item);
             }
@@ -77,6 +90,11 @@ public class MusicMenu {
 
         pages.setOnClick(event -> {
             if (event.getCurrentItem() == null) return;
+
+            if (cooldown.contains(player)) return;
+            cooldown.add(player);
+            Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 10);
+
             String songName = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
             Song song = musicManager.getSong(songName);
             if (songName != null && song != null){
@@ -85,11 +103,13 @@ public class MusicMenu {
 
                 RadioSongPlayer rsp = new RadioSongPlayer(song);
                 rsp.setChannelMode(new MonoStereoMode());
-                rsp.setVolume((byte) 50);
+                rsp.setVolume((byte) 35);
                 rsp.addPlayer(player);
                 rsp.setPlaying(true);
 
                 musicManager.saveSongPlayer(player, rsp);
+
+                Bukkit.getScheduler().runTaskLater(instance, () -> progressBar(player, rsp), 1);
 
                 player.sendMessage(toMM("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan."));
             }else {
@@ -136,5 +156,20 @@ public class MusicMenu {
         gui.addPane(navigationPane);
 
         gui.update();
+    }
+
+    public void progressBar(Player player, RadioSongPlayer rsp) {
+        double length = rsp.getSong().getLength();
+        BossBar progressBar = BossBar.bossBar(toMM(rsp.getSong().getTitle()), 0f, BossBar.Color.YELLOW, BossBar.Overlay.PROGRESS);
+        player.showBossBar(progressBar);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(instance, task -> {
+            double progress = (double) rsp.getTick() / length;
+            if (progress >= 1.0 || progress < 0){
+                progressBar.removeViewer(player);
+                task.cancel();
+                return;
+            }
+            progressBar.progress((float) progress);
+        }, 0L, 1);
     }
 }

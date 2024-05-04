@@ -9,13 +9,12 @@ public class MusicEvents implements Listener {
 
     private final MusicManager musicManager;
 
-
     public MusicEvents(MusicManager musicManager) {
         this.musicManager = musicManager;
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         musicManager.clearSongPlayer(player);
     }

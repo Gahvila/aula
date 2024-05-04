@@ -32,15 +32,14 @@ public class TeleportManager {
     }
 
     public Location getTeleportFromStorage(String type) {
-        Json homeData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
-        if (homeData.getFileData().containsKey(type)) {
-            //String name = homeData.getString(warp + "." + ".owner");
-            World world = Bukkit.getWorld(homeData.getString(type + ".world"));
-            double x = homeData.getDouble(type + ".x");
-            double y = homeData.getDouble(type + ".y");
-            double z = homeData.getDouble(type + ".z");
-            float yaw = (float) homeData.getDouble(type + ".yaw");
-            float pitch = (float) homeData.getDouble(type + ".pitch");
+        Json tpData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
+        if (tpData.getFileData().containsKey(type)) {
+            World world = Bukkit.getWorld(tpData.getString(type + ".world"));
+            double x = tpData.getDouble(type + ".x");
+            double y = tpData.getDouble(type + ".y");
+            double z = tpData.getDouble(type + ".z");
+            float yaw = (float) tpData.getDouble(type + ".yaw");
+            float pitch = (float) tpData.getDouble(type + ".pitch");
             Location location = new Location(world, x, y, z, yaw, pitch);
             return location;
         }
