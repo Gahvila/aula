@@ -5,10 +5,7 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.gahvila.aula.General.Commands.AulaAdminCommand;
 import net.gahvila.aula.General.Commands.FileserverCommand;
 import net.gahvila.aula.General.Events.*;
-import net.gahvila.aula.PlayerFeatures.Music.MusicCommand;
-import net.gahvila.aula.PlayerFeatures.Music.MusicEvents;
-import net.gahvila.aula.PlayerFeatures.Music.MusicManager;
-import net.gahvila.aula.PlayerFeatures.Music.MusicMenu;
+import net.gahvila.aula.PlayerFeatures.Music.*;
 import net.gahvila.aula.PlayerFeatures.Spawn.SpawnCommand;
 import net.gahvila.aula.PlayerFeatures.Spawn.SpawnTeleport;
 import net.gahvila.aula.General.Managers.TeleportManager;
@@ -30,8 +27,7 @@ public final class Aula extends JavaPlugin implements Listener{
     public static Aula instance;
     private PluginManager pluginManager;
     private TeleportManager teleportManager;
-    private MusicManager musicManager;
-    private MusicMenu musicMenu;
+
 
 
 
@@ -42,8 +38,8 @@ public final class Aula extends JavaPlugin implements Listener{
         pluginManager = Bukkit.getPluginManager();
         instance = this;
         teleportManager = new TeleportManager();
-        musicManager = new MusicManager();
-        musicMenu = new MusicMenu(musicManager);
+        MusicManager musicManager = new MusicManager();
+        MusicMenu musicMenu = new MusicMenu(musicManager);
 
         timeSyncScheduler();
         musicManager.loadSongs();
@@ -65,7 +61,7 @@ public final class Aula extends JavaPlugin implements Listener{
         SpawnCommand spawnCommand = new SpawnCommand(teleportManager);
         spawnCommand.registerCommands();
 
-        MusicCommand musicCommand = new MusicCommand(musicMenu);
+        MusicCommand musicCommand = new MusicCommand(musicMenu, musicManager);
         musicCommand.registerCommands();
     }
 

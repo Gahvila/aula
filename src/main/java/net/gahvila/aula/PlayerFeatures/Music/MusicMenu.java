@@ -9,6 +9,8 @@ import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
+import com.xxmicloxx.NoteBlockAPI.model.Playlist;
+import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.ChannelMode;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
@@ -101,15 +103,20 @@ public class MusicMenu {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
                 musicManager.clearSongPlayer(player);
 
-                RadioSongPlayer rsp = new RadioSongPlayer(song);
+                Playlist playlist = new Playlist(song);
+                RadioSongPlayer rsp = new RadioSongPlayer(playlist);
                 rsp.setChannelMode(new MonoStereoMode());
-                rsp.setVolume((byte) 35);
+                rsp.setVolume((byte) 45);
                 rsp.addPlayer(player);
                 rsp.setPlaying(true);
-
+                ArrayList<Song> songs = musicManager.getSongs();
+                for (Song playlistSong : songs) {
+                    playlist.add(playlistSong);
+                }
+                rsp.setRandom(true);
+                rsp.setRepeatMode(RepeatMode.ALL);
                 musicManager.saveSongPlayer(player, rsp);
-
-                Bukkit.getScheduler().runTaskLater(instance, () -> progressBar(player, rsp), 1);
+                Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.progressBar(player, rsp), 1);
 
                 player.sendMessage(toMM("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan."));
             }else {
@@ -156,20 +163,5 @@ public class MusicMenu {
         gui.addPane(navigationPane);
 
         gui.update();
-    }
-
-    public void progressBar(Player player, RadioSongPlayer rsp) {
-        double length = rsp.getSong().getLength();
-        BossBar progressBar = BossBar.bossBar(toMM("<aqua>" + rsp.getSong().getOriginalAuthor() + " - " + rsp.getSong().getTitle() + "</aqua>"), 0f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS);
-        player.showBossBar(progressBar);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(instance, task -> {
-            double progress = (double) rsp.getTick() / length;
-            if (progress >= 1.0 || progress < 0){
-                progressBar.removeViewer(player);
-                task.cancel();
-                return;
-            }
-            progressBar.progress((float) progress);
-        }, 0L, 1);
     }
 }
