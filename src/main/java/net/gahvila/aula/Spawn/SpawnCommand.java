@@ -1,4 +1,4 @@
-package net.gahvila.aula.PlayerFeatures.Spawn;
+package net.gahvila.aula.Spawn;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import net.gahvila.aula.General.Managers.TeleportManager;

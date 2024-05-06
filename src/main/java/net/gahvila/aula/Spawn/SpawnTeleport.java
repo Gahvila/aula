@@ -1,4 +1,4 @@
-package net.gahvila.aula.PlayerFeatures.Spawn;
+package net.gahvila.aula.Spawn;
 
 import net.gahvila.aula.General.Managers.TeleportManager;
 import org.bukkit.entity.Player;

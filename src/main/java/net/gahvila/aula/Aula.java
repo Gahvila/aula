@@ -5,11 +5,10 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.gahvila.aula.General.Commands.AulaAdminCommand;
 import net.gahvila.aula.General.Commands.FileserverCommand;
 import net.gahvila.aula.General.Events.*;
-import net.gahvila.aula.PlayerFeatures.Music.*;
-import net.gahvila.aula.PlayerFeatures.Spawn.SpawnCommand;
-import net.gahvila.aula.PlayerFeatures.Spawn.SpawnTeleport;
+import net.gahvila.aula.Music.*;
+import net.gahvila.aula.Spawn.SpawnCommand;
+import net.gahvila.aula.Spawn.SpawnTeleport;
 import net.gahvila.aula.General.Managers.TeleportManager;
-import net.gahvila.aula.PlayerFeatures.ServerSelector;
 import net.gahvila.aula.Utils.EmptyChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -45,8 +44,8 @@ public final class Aula extends JavaPlugin implements Listener{
         musicManager.loadSongs();
 
         //listeners
-        registerListeners(this, new PlayerJoin(), new ServerSelector(), new SpawnTeleport(teleportManager),
-                new MusicEvents(musicManager), new PlayerDamage());
+        registerListeners(this, new PlayerJoin(), new SpawnTeleport(teleportManager), new MusicEvents(musicManager),
+                new PlayerDamage());
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         //commands

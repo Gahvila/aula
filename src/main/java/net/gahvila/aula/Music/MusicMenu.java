@@ -1,4 +1,4 @@
-package net.gahvila.aula.PlayerFeatures.Music;
+package net.gahvila.aula.Music;
 
 import com.destroystokyo.paper.MaterialTags;
 import com.github.stefvanschie.inventoryframework.adventuresupport.ComponentHolder;
@@ -12,12 +12,9 @@ import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
 import com.xxmicloxx.NoteBlockAPI.model.Playlist;
 import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
-import com.xxmicloxx.NoteBlockAPI.model.playmode.ChannelMode;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
-import com.xxmicloxx.NoteBlockAPI.model.playmode.StereoMode;
+import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
-import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -30,7 +27,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
-import static java.lang.Float.MAX_VALUE;
 import static net.gahvila.aula.Aula.instance;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
@@ -62,6 +58,7 @@ public class MusicMenu {
         ItemStack background = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta backgroundMeta = background.getItemMeta();
         backgroundMeta.displayName(toUndecoratedMM(""));
+        backgroundMeta.setHideTooltip(true);
         background.setItemMeta(backgroundMeta);
         border.bindItem('1', new GuiItem(background));
         gui.addPane(border);
@@ -102,22 +99,33 @@ public class MusicMenu {
             if (songName != null && song != null){
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
                 musicManager.clearSongPlayer(player);
-
-                Playlist playlist = new Playlist(song);
-                RadioSongPlayer rsp = new RadioSongPlayer(playlist);
-                rsp.setChannelMode(new MonoStereoMode());
-                rsp.setVolume((byte) 45);
-                rsp.addPlayer(player);
-                rsp.setPlaying(true);
-                ArrayList<Song> songs = musicManager.getSongs();
-                for (Song playlistSong : songs) {
-                    playlist.add(playlistSong);
+                if (!musicManager.getSpeakerEnabled(player)) {
+                    Playlist playlist = new Playlist(song);
+                    RadioSongPlayer rsp = new RadioSongPlayer(playlist);
+                    rsp.setChannelMode(new MonoStereoMode());
+                    rsp.setVolume((byte) 45);
+                    rsp.addPlayer(player);
+                    rsp.setPlaying(true);
+                    ArrayList<Song> songs = musicManager.getSongs();
+                    for (Song playlistSong : songs) {
+                        playlist.add(playlistSong);
+                    }
+                    rsp.setRandom(true);
+                    rsp.setRepeatMode(RepeatMode.ALL);
+                    musicManager.saveSongPlayer(player, rsp);
+                    Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, rsp), 5);
+                } else if (musicManager.getSpeakerEnabled(player)) {
+                    EntitySongPlayer esp = new EntitySongPlayer(song);
+                    esp.setEntity(player);
+                    esp.setVolume((byte) 45);
+                    esp.setDistance(8);
+                    esp.setPlaying(true);
+                    for (Player onlinePlayers : Bukkit.getOnlinePlayers()) {
+                        esp.addPlayer(onlinePlayers);
+                    }
+                    musicManager.saveSongPlayer(player, esp);
+                    Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, esp), 5);
                 }
-                rsp.setRandom(true);
-                rsp.setRepeatMode(RepeatMode.ALL);
-                musicManager.saveSongPlayer(player, rsp);
-                Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.progressBar(player, rsp), 1);
-
                 player.sendMessage(toMM("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan."));
             }else {
                 player.closeInventory();
@@ -130,11 +138,63 @@ public class MusicMenu {
 
         ItemStack pause = new ItemStack(Material.BARRIER);
         ItemMeta pauseMeta = pause.getItemMeta();
-        pauseMeta.displayName(toUndecoratedMM("<red>Keskeytä"));
+        pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
         pause.setItemMeta(pauseMeta);
         navigationPane.addItem(new GuiItem(pause, event -> {
             musicManager.clearSongPlayer(player);
         }), 1, 0);
+
+        ItemStack autoplay = new ItemStack(Material.REDSTONE);
+        ItemMeta autoplayMeta = autoplay.getItemMeta();
+        autoplayMeta.displayName(toUndecoratedMM("<b>Jatkuva toisto"));
+        if (musicManager.getAutoEnabled(player)){
+            autoplayMeta.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<green>Päällä")));
+        } else {
+            autoplayMeta.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<red>Pois päältä")));
+        }
+        autoplay.setItemMeta(autoplayMeta);
+        navigationPane.addItem(new GuiItem(autoplay, event -> {
+            if (musicManager.getAutoEnabled(player)){
+                player.sendMessage("Jatkuva toisto kytketty pois päältä.");
+                musicManager.setAutoEnabled(player, false);
+                autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<red>Pois päältä")));
+            }else {
+                if (musicManager.getSpeakerEnabled(player)){
+                    player.sendMessage(toMM("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!"));
+                }
+                player.sendMessage("Jatkuva toisto kytketty päälle.");
+                musicManager.setAutoEnabled(player, true);
+                autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<green>Päällä")));
+            }
+            musicManager.clearSongPlayer(player);
+            gui.update();
+        }), 2, 0);
+
+        ItemStack speaker = new ItemStack(Material.NOTE_BLOCK);
+        ItemMeta speakerMeta = speaker.getItemMeta();
+        speakerMeta.displayName(toUndecoratedMM("<b>Kaiutintila"));
+        if (musicManager.getSpeakerEnabled(player)){
+            speakerMeta.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<green>Päällä")));
+        } else {
+            speakerMeta.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<red>Pois päältä")));
+        }
+        speaker.setItemMeta(speakerMeta);
+        navigationPane.addItem(new GuiItem(speaker, event -> {
+            if (musicManager.getSpeakerEnabled(player)){
+                player.sendMessage("Kaiutintila kytketty pois päältä.");
+                musicManager.setSpeakerEnabled(player, false);
+                speaker.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<red>Pois päältä")));
+            }else {
+                if (musicManager.getAutoEnabled(player)){
+                    player.sendMessage(toMM("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!"));
+                }
+                player.sendMessage("Kaiutintila kytketty päälle.");
+                musicManager.setSpeakerEnabled(player, true);
+                speaker.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<green>Päällä")));
+            }
+            musicManager.clearSongPlayer(player);
+            gui.update();
+        }), 3, 0);
 
         ItemStack previous = new ItemStack(Material.MANGROVE_BUTTON);
         ItemMeta previousMeta = previous.getItemMeta();
@@ -147,7 +207,7 @@ public class MusicMenu {
 
                 gui.update();
             }
-        }), 3, 0);
+        }), 6, 0);
         ItemStack next = new ItemStack(Material.WARPED_BUTTON);
         ItemMeta nextMeta = next.getItemMeta();
         nextMeta.displayName(toUndecoratedMM("<b>Seuraava"));
@@ -159,7 +219,7 @@ public class MusicMenu {
 
                 gui.update();
             }
-        }), 5, 0);
+        }), 7, 0);
         gui.addPane(navigationPane);
 
         gui.update();

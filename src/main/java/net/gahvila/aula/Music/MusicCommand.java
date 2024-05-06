@@ -1,7 +1,6 @@
-package net.gahvila.aula.PlayerFeatures.Music;
+package net.gahvila.aula.Music;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import net.gahvila.aula.General.Managers.TeleportManager;
 
 public class MusicCommand {
 

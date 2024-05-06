@@ -2,7 +2,7 @@ package net.gahvila.aula.General.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import net.gahvila.aula.General.Managers.TeleportManager;
-import net.gahvila.aula.PlayerFeatures.Music.MusicManager;
+import net.gahvila.aula.Music.MusicManager;
 
 public class AulaAdminCommand {
 
