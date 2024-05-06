@@ -5,6 +5,7 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import de.leonhard.storage.Json;
+import net.gahvila.aula.Utils.WorldGuardRegionChecker;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -115,7 +116,12 @@ public class MusicManager {
                     return;
                 }
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    onlinePlayer.spawnParticle(Particle.NOTE, player.getLocation().add(0, 2, 0), 1);
+                    if (!WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
+                        songPlayer.addPlayer(onlinePlayer);
+                        onlinePlayer.spawnParticle(Particle.NOTE, player.getLocation().add(0, 2, 0), 1);
+                    } else {
+                        songPlayer.removePlayer(onlinePlayer);
+                    }
                 }
             }, 0L, 10);
         }

@@ -18,11 +18,5 @@ public class MusicCommand {
                 musicMenu.showGUI(p);
             })
             .register();
-        new CommandAPICommand("radio")
-                .executesPlayer((p, args) -> {
-                    musicManager.setSpeakerEnabled(p, true);
-                    p.sendMessage("Kytkit radion.");
-                })
-                .register();
     }
 }

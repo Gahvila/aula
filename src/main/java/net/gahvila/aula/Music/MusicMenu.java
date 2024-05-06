@@ -9,12 +9,15 @@ import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.xxmicloxx.NoteBlockAPI.model.Playlist;
 import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
 import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
+import net.gahvila.aula.Utils.WorldGuardRegionChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -120,8 +123,11 @@ public class MusicMenu {
                     esp.setVolume((byte) 45);
                     esp.setDistance(8);
                     esp.setPlaying(true);
-                    for (Player onlinePlayers : Bukkit.getOnlinePlayers()) {
-                        esp.addPlayer(onlinePlayers);
+
+                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                        if (!WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
+                            esp.addPlayer(onlinePlayer);
+                        }
                     }
                     musicManager.saveSongPlayer(player, esp);
                     Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, esp), 5);

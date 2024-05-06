@@ -25,9 +25,13 @@ repositories {
     maven {
         url = uri("https://jitpack.io")
     }
+    maven {
+        url = uri("https://maven.enginehub.org/repo/")
+    }
 }
 
 dependencies {
+    compileOnly ("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
     compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
     compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
     implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
