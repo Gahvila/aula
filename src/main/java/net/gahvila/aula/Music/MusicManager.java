@@ -97,7 +97,8 @@ public class MusicManager {
 
     public void songPlayerSchedule(Player player, SongPlayer songPlayer) {
         double length = songPlayer.getSong().getLength();
-        BossBar progressBar = BossBar.bossBar(toMM("<aqua>" + songPlayer.getSong().getOriginalAuthor() + " - " + songPlayer.getSong().getTitle() + "</aqua>"), 0f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS);
+        BossBar progressBar = BossBar.bossBar(toMM("<aqua>" + songPlayer.getSong().getOriginalAuthor() + " - " +
+                songPlayer.getSong().getTitle() + "</aqua>"), 0f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS);
         player.showBossBar(progressBar);
         Bukkit.getScheduler().runTaskTimerAsynchronously(instance, task -> {
             double progress = (double) songPlayer.getTick() / length;

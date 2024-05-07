@@ -5,6 +5,8 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.gahvila.aula.General.Commands.AulaAdminCommand;
 import net.gahvila.aula.General.Commands.FileserverCommand;
 import net.gahvila.aula.General.Events.*;
+import net.gahvila.aula.Hotbar.HotbarEvent;
+import net.gahvila.aula.Hotbar.HotbarManager;
 import net.gahvila.aula.Music.*;
 import net.gahvila.aula.Spawn.SpawnCommand;
 import net.gahvila.aula.Spawn.SpawnTeleport;
@@ -38,6 +40,7 @@ public final class Aula extends JavaPlugin implements Listener{
         instance = this;
         teleportManager = new TeleportManager();
         MusicManager musicManager = new MusicManager();
+        HotbarManager hotbarManager = new HotbarManager();
         MusicMenu musicMenu = new MusicMenu(musicManager);
 
         timeSyncScheduler();
@@ -45,7 +48,7 @@ public final class Aula extends JavaPlugin implements Listener{
 
         //listeners
         registerListeners(this, new PlayerJoin(), new SpawnTeleport(teleportManager), new MusicEvents(musicManager),
-                new PlayerDamage());
+                new PlayerDamage(), new HotbarEvent(hotbarManager));
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         //commands
@@ -54,7 +57,7 @@ public final class Aula extends JavaPlugin implements Listener{
         FileserverCommand fileserverCommand = new FileserverCommand();
         fileserverCommand.registerCommands();
 
-        AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, musicManager);
+        AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, musicManager, hotbarManager);
         aulaAdminCommand.registerCommands();
 
         SpawnCommand spawnCommand = new SpawnCommand(teleportManager);
