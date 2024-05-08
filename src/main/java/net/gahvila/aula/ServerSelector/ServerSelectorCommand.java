@@ -1,7 +1,6 @@
 package net.gahvila.aula.ServerSelector;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import net.gahvila.aula.Music.MusicMenu;
 
 public class ServerSelectorCommand {
 

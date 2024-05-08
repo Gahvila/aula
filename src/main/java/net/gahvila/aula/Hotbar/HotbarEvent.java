@@ -1,13 +1,9 @@
 package net.gahvila.aula.Hotbar;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -23,6 +19,7 @@ public class HotbarEvent implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (hotbarManager.getHotbarEnabled(player)) {
+            player.getInventory().setHeldItemSlot(4);
             hotbarManager.giveHotbar(player, Hotbar.DEFAULT);
         }
     }
@@ -35,7 +32,7 @@ public class HotbarEvent implements Listener {
             switch (hotbarManager.getCurrentHotbar(player)) {
                 case DEFAULT:
                     int slot = player.getInventory().getHeldItemSlot();
-                    if (slot == 1){
+                    if (slot == 1) {
                         //nothing
                     } else if (slot == 4) {
                         player.performCommand("serverselector");
