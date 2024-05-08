@@ -27,7 +27,7 @@ public class HotbarManager {
             return;
         }
         hotbarEnabled.put(player, true);
-        giveHotbar(player, Hotbar.DEFAULT);
+        giveHotbar(player, getCurrentHotbar(player));
     }
 
     public Hotbar getCurrentHotbar(Player player) {

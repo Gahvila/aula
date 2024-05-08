@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class HotbarEvent implements Listener {
 
@@ -54,6 +55,14 @@ public class HotbarEvent implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory() != event.getWhoClicked().getInventory()) return;
+        if (hotbarManager.getHotbarEnabled(player)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onHandSwap(PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
         if (hotbarManager.getHotbarEnabled(player)) {
             event.setCancelled(true);
         }
