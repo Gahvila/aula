@@ -8,6 +8,8 @@ import net.gahvila.aula.General.Events.*;
 import net.gahvila.aula.Hotbar.HotbarEvent;
 import net.gahvila.aula.Hotbar.HotbarManager;
 import net.gahvila.aula.Music.*;
+import net.gahvila.aula.ServerSelector.ServerSelectorCommand;
+import net.gahvila.aula.ServerSelector.ServerSelectorMenu;
 import net.gahvila.aula.Spawn.SpawnCommand;
 import net.gahvila.aula.Spawn.SpawnTeleport;
 import net.gahvila.aula.General.Managers.TeleportManager;
@@ -42,12 +44,14 @@ public final class Aula extends JavaPlugin implements Listener{
         MusicManager musicManager = new MusicManager();
         HotbarManager hotbarManager = new HotbarManager();
         MusicMenu musicMenu = new MusicMenu(musicManager);
+        ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
+
 
         timeSyncScheduler();
         musicManager.loadSongs();
 
         //listeners
-        registerListeners(this, new PlayerJoin(), new SpawnTeleport(teleportManager), new MusicEvents(musicManager),
+        registerListeners(this, new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager), new MusicEvents(musicManager),
                 new PlayerDamage(), new HotbarEvent(hotbarManager));
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
@@ -63,8 +67,11 @@ public final class Aula extends JavaPlugin implements Listener{
         SpawnCommand spawnCommand = new SpawnCommand(teleportManager);
         spawnCommand.registerCommands();
 
-        MusicCommand musicCommand = new MusicCommand(musicMenu, musicManager);
+        MusicCommand musicCommand = new MusicCommand(musicMenu);
         musicCommand.registerCommands();
+
+        ServerSelectorCommand serverSelectorCommand = new ServerSelectorCommand(serverSelectorMenu);
+        serverSelectorCommand.registerCommands();
     }
 
     @Override

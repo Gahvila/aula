@@ -13,7 +13,8 @@ public enum Hotbar {
                     HotbarManager.createItem(Material.RECOVERY_COMPASS, "<b><white>Palvelinvalikko"),
                     new ItemStack(Material.AIR),
                     new ItemStack(Material.AIR),
-                    HotbarManager.createItem(Material.MUSIC_DISC_5, "<b><white>Musiikkivalikko")
+                    HotbarManager.createItem(Material.MUSIC_DISC_5, "<b><white>Musiikkivalikko"),
+                    new ItemStack(Material.AIR)
 
             }
     ),

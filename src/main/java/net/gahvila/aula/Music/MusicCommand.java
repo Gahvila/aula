@@ -5,11 +5,9 @@ import dev.jorel.commandapi.CommandAPICommand;
 public class MusicCommand {
 
     private final MusicMenu musicMenu;
-    private final MusicManager musicManager;
 
-    public MusicCommand(MusicMenu musicMenu, MusicManager musicManager) {
+    public MusicCommand(MusicMenu musicMenu) {
         this.musicMenu = musicMenu;
-        this.musicManager = musicManager;
     }
 
     public void registerCommands() {

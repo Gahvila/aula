@@ -3,9 +3,11 @@ package net.gahvila.aula.Hotbar;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -35,7 +37,7 @@ public class HotbarEvent implements Listener {
                     if (slot == 1){
                         //nothing
                     } else if (slot == 4) {
-                        //nothing
+                        player.performCommand("serverselector");
                     } else if (slot == 7) {
                         player.performCommand("music");
                     }
@@ -51,14 +53,7 @@ public class HotbarEvent implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (hotbarManager.getHotbarEnabled(player)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onInventoryInteract(InventoryInteractEvent event) {
-        Player player = (Player) event.getWhoClicked();
+        if (event.getClickedInventory() != event.getWhoClicked().getInventory()) return;
         if (hotbarManager.getHotbarEnabled(player)) {
             event.setCancelled(true);
         }
