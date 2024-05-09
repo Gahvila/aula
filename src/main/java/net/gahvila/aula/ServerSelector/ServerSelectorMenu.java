@@ -9,9 +9,12 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -43,31 +46,34 @@ public class ServerSelectorMenu {
 
         StaticPane navigationPane = new StaticPane(3, 1, 3, 1);
 
+        NamespacedKey key = new NamespacedKey(instance, "aula");
+
+
         ItemStack survival = new ItemStack(Material.GRASS_BLOCK);
         ItemMeta survivalMeta = survival.getItemMeta();
         survivalMeta.displayName(toUndecoratedMM("<#85FF00><b>Survival</b></#85FF00>"));
         survivalMeta.lore(List.of(toUndecoratedMM("<white>Klikkaa liittyäksesi")));
+        survivalMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "survival");
         survival.setItemMeta(survivalMeta);
-
-        navigationPane.addItem(new GuiItem(survival, event -> {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("Connect");
-            out.writeUTF("survival");
-            player.sendPluginMessage(instance, "BungeeCord", out.toByteArray());
-        }), 0, 0);
+        navigationPane.addItem(new GuiItem(survival), 0, 0);
 
         ItemStack luova = new ItemStack(Material.CRAFTING_TABLE);
         ItemMeta luovaMeta = luova.getItemMeta();
         luovaMeta.displayName(toUndecoratedMM("<gold><b>Luova</b></gold>"));
         luovaMeta.lore(List.of(toUndecoratedMM("<white>Klikkaa liittyäksesi")));
+        luovaMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "luova");
         luova.setItemMeta(luovaMeta);
+        navigationPane.addItem(new GuiItem(luova), 2, 0);
 
-        navigationPane.addItem(new GuiItem(luova, event -> {
+        navigationPane.setOnClick(event -> {
+            if (event.getCurrentItem().getItemMeta().isHideTooltip()) return;
+            String server = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("Connect");
-            out.writeUTF("luova");
+            out.writeUTF(server);
             player.sendPluginMessage(instance, "BungeeCord", out.toByteArray());
-        }), 2, 0);
+        });
 
         gui.addPane(navigationPane);
 

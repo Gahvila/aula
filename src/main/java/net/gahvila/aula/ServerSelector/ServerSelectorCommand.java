@@ -1,6 +1,7 @@
 package net.gahvila.aula.ServerSelector;
 
 import dev.jorel.commandapi.CommandAPICommand;
+import org.bukkit.Sound;
 
 public class ServerSelectorCommand {
 
@@ -14,6 +15,7 @@ public class ServerSelectorCommand {
         new CommandAPICommand("serverselector")
                 .withAliases("palvelinvalikko")
                 .executesPlayer((p, args) -> {
+                    p.playSound(p.getLocation(), Sound.ENTITY_LLAMA_SWAG, 0.6F, 1F);
                     serverSelectorMenu.showGUI(p);
                 })
                 .register();
