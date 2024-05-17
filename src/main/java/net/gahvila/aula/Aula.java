@@ -8,6 +8,7 @@ import net.gahvila.aula.General.Events.PlayerDamage;
 import net.gahvila.aula.General.Events.PlayerJoin;
 import net.gahvila.aula.General.Events.PlayerLeave;
 import net.gahvila.aula.General.Managers.TeleportManager;
+import net.gahvila.aula.Hologram.HoloManager;
 import net.gahvila.aula.Hotbar.HotbarEvent;
 import net.gahvila.aula.Hotbar.HotbarManager;
 import net.gahvila.aula.Music.MusicCommand;
@@ -48,12 +49,14 @@ public final class Aula extends JavaPlugin implements Listener{
         teleportManager = new TeleportManager();
         MusicManager musicManager = new MusicManager();
         HotbarManager hotbarManager = new HotbarManager();
+        HoloManager holoManager = new HoloManager();
         MusicMenu musicMenu = new MusicMenu(musicManager);
         ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
 
 
         timeSyncScheduler();
         musicManager.loadSongs();
+        holoManager.showHolograms();
 
         //listeners
         registerListeners(this, new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager), new MusicEvents(musicManager),

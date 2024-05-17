@@ -9,8 +9,8 @@ public class FileserverCommand {
         new CommandAPICommand("latauspalvelin")
                 .executesPlayer((p, args) -> {
                     p.sendMessage(toMM("<white>Gahvilan latauspalvelimen tunnukset</white> <dark_gray>(<yellow>https://download.gahvila.net</yellow></dark_gray><white>)</white>"));
-                    p.sendMessage("<white>Käyttäjänimi:</white> <yellow>gahvila</yellow>");
-                    p.sendMessage("<white>Salasana:</white> <yellow>gahvilafiles</yellow>");
+                    p.sendMessage(toMM("<white>Käyttäjänimi:</white> <yellow>gahvila</yellow>"));
+                    p.sendMessage(toMM("<white>Salasana:</white> <yellow>gahvilafiles</yellow>"));
                 })
                 .register();
     }

@@ -3,10 +3,9 @@ package net.gahvila.aula.Hotbar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.*;
 
 public class HotbarEvent implements Listener {
 
@@ -62,6 +61,23 @@ public class HotbarEvent implements Listener {
         Player player = event.getPlayer();
         if (hotbarManager.getHotbarEnabled(player)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (hotbarManager.getHotbarEnabled(player)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onItemPickup(EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            if (hotbarManager.getHotbarEnabled(player)) {
+                event.setCancelled(true);
+            }
         }
     }
 }

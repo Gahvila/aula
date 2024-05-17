@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import static net.gahvila.aula.Aula.instance;
@@ -28,5 +29,14 @@ public class PlayerDamage implements Listener {
         Player p = e.getPlayer();
         e.setCancelled(true);
         p.setHealth(20);
+    }
+
+    @EventHandler
+    public void onFeed(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player player){
+            event.setCancelled(true);
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+        }
     }
 }

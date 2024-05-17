@@ -5,6 +5,7 @@
 plugins {
     java
     `maven-publish`
+    id("io.papermc.paperweight.userdev") version "1.7.1"
     id("io.github.goooler.shadow") version "8.1.7"
 }
 java {
@@ -13,6 +14,7 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
+    gradlePluginPortal()
     maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
         name = "sonatype-oss-snapshots"
     }
@@ -28,20 +30,23 @@ repositories {
     maven {
         url = uri("https://maven.enginehub.org/repo/")
     }
+    maven {
+        url = uri("https://repo.fancyplugins.de/releases")
+    }
 }
 
 dependencies {
     compileOnly ("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
     compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
-    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+    compileOnly("de.oliver:FancyHolograms:2.0.6")
     implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
-    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.14-SNAPSHOT")
-    implementation ("com.github.retrooper.packetevents:spigot:2.2.1")
+    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.14")
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 
     //commandapi
-    compileOnly("dev.jorel:commandapi-annotations:9.4.0")
-    implementation("dev.jorel:commandapi-bukkit-shade:9.4.0")
-    annotationProcessor("dev.jorel:commandapi-annotations:9.4.0")
+    compileOnly("dev.jorel:commandapi-annotations:9.4.1")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1")
+    annotationProcessor("dev.jorel:commandapi-annotations:9.4.1")
 }
 
 group = "Aula"
@@ -54,6 +59,9 @@ publishing {
         from(components["java"])
     }
 }
+
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+
 tasks {
     compileJava {
         options.release = 21
@@ -67,9 +75,9 @@ tasks {
     shadowJar {
         archiveFileName.set("${rootProject.name}-${version}.jar")
         dependencies {
-            include(dependency("dev.jorel:commandapi-bukkit-shade:9.4.0"))
+            include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1"))
             include(dependency("com.github.DaJokni:simplixstorage:-SNAPSHOT"))
-            include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.14-SNAPSHOT"))
+            include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.14"))
         }
         relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
         relocate("de.leonhard.storage", "net.gahvila.survival.shaded.storage")
