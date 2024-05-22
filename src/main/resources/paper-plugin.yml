@@ -1,0 +1,13 @@
+name: Aula
+version: '3.0'
+main: net.gahvila.aula.Aula
+load: STARTUP
+api-version: '1.20.6'
+dependencies:
+  server:
+    NoteBlockAPI:
+      required: true
+    WorldGuard:
+      required: true
+    GahvilaCore:
+      required: false

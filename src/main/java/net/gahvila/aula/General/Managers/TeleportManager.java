@@ -40,16 +40,14 @@ public class TeleportManager {
             double z = tpData.getDouble(type + ".z");
             float yaw = (float) tpData.getDouble(type + ".yaw");
             float pitch = (float) tpData.getDouble(type + ".pitch");
-            Location location = new Location(world, x, y, z, yaw, pitch);
-            return location;
+            return new Location(world, x, y, z, yaw, pitch);
         }
         return null;
     }
 
     public ArrayList<String> getTeleportsFromStorage() {
         Json tpData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
-        ArrayList<String> teleports = new ArrayList<>();
-        teleports.addAll(tpData.getFileData().singleLayerKeySet());
+        ArrayList<String> teleports = new ArrayList<>(tpData.getFileData().singleLayerKeySet());
         return teleports;
     }
     public void putTeleportsIntoCache(){

@@ -12,7 +12,6 @@ public class SpawnTeleport implements Listener {
 
     public SpawnTeleport(TeleportManager teleportManager) {
         this.teleportManager = teleportManager;
-
     }
 
     @EventHandler

@@ -23,7 +23,7 @@ public class AulaAdminCommand {
                 .withSubcommand(new CommandAPICommand("togglehotbar")
                         .executesPlayer((p, args) -> {
                             hotbarManager.setHotbarEnabled(p);
-                            p.sendMessage("Kytkit hotbarin");
+                            p.sendMessage("Hotbar: " + hotbarManager.getHotbarEnabled(p));
                         }))
                 .withSubcommand(new CommandAPICommand("setspawn")
                         .executesPlayer((p, args) -> {

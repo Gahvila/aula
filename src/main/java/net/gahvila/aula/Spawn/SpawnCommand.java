@@ -13,7 +13,6 @@ public class SpawnCommand {
 
     public SpawnCommand(TeleportManager teleportManager) {
         this.teleportManager = teleportManager;
-
     }
 
     public void registerCommands() {

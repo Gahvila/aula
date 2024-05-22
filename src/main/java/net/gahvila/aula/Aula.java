@@ -36,9 +36,6 @@ public final class Aula extends JavaPlugin implements Listener{
     private PluginManager pluginManager;
     private TeleportManager teleportManager;
 
-
-
-
     @Override
     public void onEnable() {
 
@@ -79,15 +76,12 @@ public final class Aula extends JavaPlugin implements Listener{
         serverSelectorCommand.registerCommands();
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
 
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         teleportManager.putTeleportsIntoCache();
     }
+
     private void registerListeners(Listener...listeners){
         for(Listener listener : listeners){
             pluginManager.registerEvents(listener, this);
