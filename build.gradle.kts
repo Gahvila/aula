@@ -1,7 +1,6 @@
 plugins {
     java
     `maven-publish`
-    id("io.papermc.paperweight.userdev") version "1.7.1"
     id("io.github.goooler.shadow") version "8.1.7"
 }
 java {
@@ -36,12 +35,12 @@ dependencies {
     compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
     implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
     implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.14")
-    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
 
     //commandapi
-    compileOnly("dev.jorel:commandapi-annotations:9.4.1")
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1")
-    annotationProcessor("dev.jorel:commandapi-annotations:9.4.1")
+    compileOnly("dev.jorel:commandapi-annotations:9.4.2")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.2")
+    annotationProcessor("dev.jorel:commandapi-annotations:9.4.2")
 }
 
 group = "Aula"
@@ -54,8 +53,6 @@ publishing {
         from(components["java"])
     }
 }
-
-paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 
 tasks {
     compileJava {
@@ -70,7 +67,7 @@ tasks {
     shadowJar {
         archiveFileName.set("${rootProject.name}-${version}.jar")
         dependencies {
-            include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1"))
+            include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.2"))
             include(dependency("com.github.DaJokni:simplixstorage:-SNAPSHOT"))
             include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.14"))
         }
