@@ -14,6 +14,8 @@ import net.gahvila.aula.Music.MusicCommand;
 import net.gahvila.aula.Music.MusicEvents;
 import net.gahvila.aula.Music.MusicManager;
 import net.gahvila.aula.Music.MusicMenu;
+import net.gahvila.aula.Profile.ProfileCommand;
+import net.gahvila.aula.Profile.ProfileMenu;
 import net.gahvila.aula.ServerSelector.ServerSelectorCommand;
 import net.gahvila.aula.ServerSelector.ServerSelectorMenu;
 import net.gahvila.aula.Spawn.SpawnCommand;
@@ -47,6 +49,7 @@ public final class Aula extends JavaPlugin implements Listener{
         HotbarManager hotbarManager = new HotbarManager();
         MusicMenu musicMenu = new MusicMenu(musicManager);
         ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
+        ProfileMenu profileMenu = new ProfileMenu();
 
 
         timeSyncScheduler();
@@ -71,6 +74,9 @@ public final class Aula extends JavaPlugin implements Listener{
 
         MusicCommand musicCommand = new MusicCommand(musicMenu);
         musicCommand.registerCommands();
+
+        ProfileCommand profileCommand = new ProfileCommand(profileMenu);
+        profileCommand.registerCommands();
 
         ServerSelectorCommand serverSelectorCommand = new ServerSelectorCommand(serverSelectorMenu);
         serverSelectorCommand.registerCommands();
