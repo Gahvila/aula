@@ -45,23 +45,40 @@ public final class Aula extends JavaPlugin implements Listener{
         pluginManager = Bukkit.getPluginManager();
         instance = this;
         teleportManager = new TeleportManager();
-        MusicManager musicManager = new MusicManager();
-        HotbarManager hotbarManager = new HotbarManager();
-        MusicMenu musicMenu = new MusicMenu(musicManager);
-        ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
-        ProfileMenu profileMenu = new ProfileMenu();
 
+
+        registerListeners(this, new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
+                new PlayerDamage());
+
+        //commandapi
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true));
+
+        //music
+        MusicManager musicManager = new MusicManager();
+        MusicMenu musicMenu = new MusicMenu(musicManager);
+        musicManager.loadSongs();
+        MusicCommand musicCommand = new MusicCommand(musicMenu);
+        musicCommand.registerCommands();
+        registerListeners(new MusicEvents(musicManager));
+
+        //hotbar
+        HotbarManager hotbarManager = new HotbarManager();
+        registerListeners(new HotbarEvent(hotbarManager));
+
+        //serverselector
+        ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
+        ServerSelectorCommand serverSelectorCommand = new ServerSelectorCommand(serverSelectorMenu);
+        serverSelectorCommand.registerCommands();
+
+        //profile
+        ProfileMenu profileMenu = new ProfileMenu();
+        ProfileCommand profileCommand = new ProfileCommand(profileMenu);
+        profileCommand.registerCommands();
+
+        //general
+        TeleportManager teleportManager = new TeleportManager();
 
         timeSyncScheduler();
-        musicManager.loadSongs();
-
-        //listeners
-        registerListeners(this, new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager), new MusicEvents(musicManager),
-                new PlayerDamage(), new HotbarEvent(hotbarManager));
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-
-        //commands
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true));
 
         FileserverCommand fileserverCommand = new FileserverCommand();
         fileserverCommand.registerCommands();
@@ -72,14 +89,7 @@ public final class Aula extends JavaPlugin implements Listener{
         SpawnCommand spawnCommand = new SpawnCommand(teleportManager);
         spawnCommand.registerCommands();
 
-        MusicCommand musicCommand = new MusicCommand(musicMenu);
-        musicCommand.registerCommands();
-
-        ProfileCommand profileCommand = new ProfileCommand(profileMenu);
-        profileCommand.registerCommands();
-
-        ServerSelectorCommand serverSelectorCommand = new ServerSelectorCommand(serverSelectorMenu);
-        serverSelectorCommand.registerCommands();
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
 

@@ -17,7 +17,7 @@ public class ProfileCommand {
                 .withAliases("profiili")
                 .executesPlayer((p, args) -> {
                     p.playSound(p.getLocation(), Sound.ENTITY_LLAMA_SWAG, 0.6F, 1F);
-                    //profileMenu.showGUI(p);
+                    profileMenu.showGUI(p);
                 })
                 .register();
     }

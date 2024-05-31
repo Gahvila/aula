@@ -72,7 +72,7 @@ tasks {
             include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.14"))
         }
         relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
-        relocate("de.leonhard.storage", "net.gahvila.survival.shaded.storage")
+        relocate("de.leonhard.storage", "net.gahvila.aula.shaded.storage")
         relocate ("com.github.stefvanschie.inventoryframework", "net.gahvila.aula.shaded.inventoryframework")
     }
 }
