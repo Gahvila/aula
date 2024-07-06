@@ -54,9 +54,7 @@ public class TeleportManager {
         ArrayList<String> teleportTypes = getTeleportsFromStorage();
         for (String type : teleportTypes) {
             Location location = getTeleportFromStorage(type);
-            if (location != null) {
-                teleportCache.put(type, location);
-            }
+            teleportCache.put(type, location);
         }
     }
 }

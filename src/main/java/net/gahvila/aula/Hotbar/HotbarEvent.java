@@ -35,7 +35,7 @@ public class HotbarEvent implements Listener {
                 case DEFAULT:
                     int slot = player.getInventory().getHeldItemSlot();
                     if (slot == 1) {
-                        //nothing
+                        player.performCommand("profile");
                     } else if (slot == 4) {
                         player.performCommand("serverselector");
                     } else if (slot == 7) {

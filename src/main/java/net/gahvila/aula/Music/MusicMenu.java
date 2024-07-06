@@ -16,18 +16,19 @@ import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
 import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import net.gahvila.aula.Utils.WorldGuardRegionChecker;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static net.gahvila.aula.Aula.instance;
@@ -82,7 +83,9 @@ public class MusicMenu {
                 meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, song.getTitle());
                 meta.displayName(toUndecoratedMM("<white>" + song.getTitle()));
                 meta.lore(List.of(toUndecoratedMM("<gray>" + song.getOriginalAuthor())));
-                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+                JukeboxPlayableComponent component = meta.getJukeboxPlayable();
+                component.setShowInTooltip(false);
+                meta.setJukeboxPlayable(component);
                 item.setItemMeta(meta);
                 items.add(item);
             }
@@ -147,7 +150,17 @@ public class MusicMenu {
         pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
         pause.setItemMeta(pauseMeta);
         navigationPane.addItem(new GuiItem(pause, event -> {
-            musicManager.clearSongPlayer(player);
+            if (event.getClick().isLeftClick()) {
+                if (musicManager.getSongPlayer(player) != null) {
+                    if (musicManager.getSongPlayer(player).isPlaying()) {
+                        musicManager.getSongPlayer(player).setPlaying(false);
+                    } else {
+                        musicManager.getSongPlayer(player).setPlaying(true);
+                    }
+                }
+            } else if (event.getClick().isShiftClick()) {
+                musicManager.clearSongPlayer(player);
+            }
         }), 1, 0);
 
         ItemStack autoplay = new ItemStack(Material.REDSTONE);

@@ -7,6 +7,7 @@ import net.gahvila.aula.General.Commands.FileserverCommand;
 import net.gahvila.aula.General.Events.PlayerDamage;
 import net.gahvila.aula.General.Events.PlayerJoin;
 import net.gahvila.aula.General.Events.PlayerLeave;
+import net.gahvila.aula.General.Events.WorldLoad;
 import net.gahvila.aula.General.Managers.TeleportManager;
 import net.gahvila.aula.Hotbar.HotbarEvent;
 import net.gahvila.aula.Hotbar.HotbarManager;
@@ -47,7 +48,7 @@ public final class Aula extends JavaPlugin implements Listener{
         teleportManager = new TeleportManager();
 
 
-        registerListeners(this, new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
+        registerListeners(new WorldLoad(teleportManager), new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
                 new PlayerDamage());
 
         //commandapi
@@ -77,6 +78,7 @@ public final class Aula extends JavaPlugin implements Listener{
 
         //general
         TeleportManager teleportManager = new TeleportManager();
+        teleportManager.putTeleportsIntoCache();
 
         timeSyncScheduler();
 
@@ -90,12 +92,6 @@ public final class Aula extends JavaPlugin implements Listener{
         spawnCommand.registerCommands();
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-    }
-
-
-    @EventHandler
-    public void onWorldLoad(WorldLoadEvent event) {
-        teleportManager.putTeleportsIntoCache();
     }
 
     private void registerListeners(Listener...listeners){

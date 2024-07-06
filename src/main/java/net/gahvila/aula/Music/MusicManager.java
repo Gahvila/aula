@@ -57,6 +57,10 @@ public class MusicManager {
         songPlayers.put(player, songPlayer);
     }
 
+    public SongPlayer getSongPlayer(Player player){
+        return songPlayers.get(player);
+    }
+
     public void clearSongPlayer(Player player){
         if (!songPlayers.containsKey(player)) return;
         if (songPlayers.get(player) == null) songPlayers.remove(player);

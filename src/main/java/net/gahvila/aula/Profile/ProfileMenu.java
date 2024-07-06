@@ -58,6 +58,7 @@ public class ProfileMenu {
         navigationPane.addItem(new GuiItem(itemCreator(Material.EMERALD, "Kauppa", List.of("nii", "2"), "/shop", false)), 6, 0);
 
         navigationPane.setOnClick(event -> {
+            if (event.getCurrentItem() == null) return;
             String command = event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
             player.performCommand(command);

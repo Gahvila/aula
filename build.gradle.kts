@@ -34,13 +34,13 @@ dependencies {
     compileOnly ("com.sk89q.worldguard:worldguard-bukkit:7.0.10")
     compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
     implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
-    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.14")
-    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.15")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
 
     //commandapi
-    compileOnly("dev.jorel:commandapi-annotations:9.4.2")
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.2")
-    annotationProcessor("dev.jorel:commandapi-annotations:9.4.2")
+    compileOnly("dev.jorel:commandapi-annotations:9.5.1")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.5.1")
+    annotationProcessor("dev.jorel:commandapi-annotations:9.5.1")
 }
 
 group = "Aula"
@@ -67,9 +67,9 @@ tasks {
     shadowJar {
         archiveFileName.set("${rootProject.name}-${version}.jar")
         dependencies {
-            include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.2"))
+            include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.1"))
             include(dependency("com.github.DaJokni:simplixstorage:-SNAPSHOT"))
-            include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.14"))
+            include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.15"))
         }
         relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
         relocate("de.leonhard.storage", "net.gahvila.aula.shaded.storage")
