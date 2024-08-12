@@ -16,8 +16,12 @@ public class ProfileCommand {
         new CommandAPICommand("profile")
                 .withAliases("profiili")
                 .executesPlayer((p, args) -> {
-                    p.playSound(p.getLocation(), Sound.ENTITY_LLAMA_SWAG, 0.6F, 1F);
-                    profileMenu.showGUI(p);
+                    if (p.hasPermission("admin.profile")) {
+                        p.playSound(p.getLocation(), Sound.ENTITY_LLAMA_SWAG, 0.6F, 1F);
+                        profileMenu.showGUI(p);
+                    } else {
+                        p.sendMessage("Tämä toiminto ei ole vielä käytössä.");
+                    }
                 })
                 .register();
     }
