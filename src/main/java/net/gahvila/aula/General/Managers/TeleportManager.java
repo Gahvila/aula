@@ -15,15 +15,13 @@ public class TeleportManager {
     public HashMap<String, Location> teleportCache = new HashMap<>();
 
     public void saveTeleport(String type, Location location) {
-        Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
-            Json tpData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
-            tpData.getFileData().insert(type + ".world", location.getWorld().getName());
-            tpData.getFileData().insert(type + ".x", location.getX());
-            tpData.getFileData().insert(type + ".y", location.getY());
-            tpData.getFileData().insert(type + ".z", location.getZ());
-            tpData.getFileData().insert(type + ".yaw", location.getYaw());
-            tpData.set(type + ".pitch", location.getPitch());
-        });
+        Json tpData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
+        tpData.getFileData().insert(type + ".world", location.getWorld().getName());
+        tpData.getFileData().insert(type + ".x", location.getX());
+        tpData.getFileData().insert(type + ".y", location.getY());
+        tpData.getFileData().insert(type + ".z", location.getZ());
+        tpData.getFileData().insert(type + ".yaw", location.getYaw());
+        tpData.set(type + ".pitch", location.getPitch());
         teleportCache.put(type, location);
     }
 
@@ -47,8 +45,7 @@ public class TeleportManager {
 
     public ArrayList<String> getTeleportsFromStorage() {
         Json tpData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
-        ArrayList<String> teleports = new ArrayList<>(tpData.getFileData().singleLayerKeySet());
-        return teleports;
+        return new ArrayList<>(tpData.getFileData().singleLayerKeySet());
     }
     public void putTeleportsIntoCache(){
         ArrayList<String> teleportTypes = getTeleportsFromStorage();

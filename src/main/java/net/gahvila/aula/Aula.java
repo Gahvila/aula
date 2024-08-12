@@ -33,7 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public final class Aula extends JavaPlugin implements Listener{
+public final class Aula extends JavaPlugin {
 
     public static Aula instance;
     private PluginManager pluginManager;
@@ -78,7 +78,7 @@ public final class Aula extends JavaPlugin implements Listener{
 
         //general
         TeleportManager teleportManager = new TeleportManager();
-        teleportManager.putTeleportsIntoCache();
+        Bukkit.getScheduler().runTaskLater(instance, teleportManager::putTeleportsIntoCache, 20L);
 
         timeSyncScheduler();
 

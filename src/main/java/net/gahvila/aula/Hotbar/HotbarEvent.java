@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 public class HotbarEvent implements Listener {
 
@@ -31,6 +32,7 @@ public class HotbarEvent implements Listener {
         Player player = event.getPlayer();
         if (hotbarManager.getHotbarEnabled(player)) {
             event.setCancelled(true);
+            if (!(event.getHand() == EquipmentSlot.HAND)) return;
             switch (hotbarManager.getCurrentHotbar(player)) {
                 case DEFAULT:
                     int slot = player.getInventory().getHeldItemSlot();
