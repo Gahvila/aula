@@ -46,7 +46,7 @@ public class MusicEvents implements Listener {
         for (UUID uuid : playerUUIDs) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                player.sendMessage(toMM("Nyt soi: <yellow>" + songPlayer.getSong().getTitle()));
+                player.sendRichMessage("Nyt soi: <yellow>" + songPlayer.getSong().getTitle());
                 musicManager.songPlayerSchedule(player, songPlayer);
             }
         }

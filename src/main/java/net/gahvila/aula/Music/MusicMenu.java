@@ -135,10 +135,10 @@ public class MusicMenu {
                     musicManager.saveSongPlayer(player, esp);
                     Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, esp), 5);
                 }
-                player.sendMessage(toMM("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan."));
+                player.sendRichMessage("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan.");
             }else {
                 player.closeInventory();
-                player.sendMessage("VIRHE: Tuota kappaletta ei ole olemassa.");
+                player.sendRichMessage("VIRHE: Tuota kappaletta ei ole olemassa.");
             }
         });
 
@@ -174,14 +174,14 @@ public class MusicMenu {
         autoplay.setItemMeta(autoplayMeta);
         navigationPane.addItem(new GuiItem(autoplay, event -> {
             if (musicManager.getAutoEnabled(player)){
-                player.sendMessage("Jatkuva toisto kytketty pois päältä.");
+                player.sendRichMessage("Jatkuva toisto kytketty pois päältä.");
                 musicManager.setAutoEnabled(player, false);
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<red>Pois päältä")));
             }else {
                 if (musicManager.getSpeakerEnabled(player)){
-                    player.sendMessage(toMM("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!"));
+                    player.sendRichMessage("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!");
                 }
-                player.sendMessage("Jatkuva toisto kytketty päälle.");
+                player.sendRichMessage("Jatkuva toisto kytketty päälle.");
                 musicManager.setAutoEnabled(player, true);
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<green>Päällä")));
             }
@@ -200,14 +200,14 @@ public class MusicMenu {
         speaker.setItemMeta(speakerMeta);
         navigationPane.addItem(new GuiItem(speaker, event -> {
             if (musicManager.getSpeakerEnabled(player)){
-                player.sendMessage("Kaiutintila kytketty pois päältä.");
+                player.sendRichMessage("Kaiutintila kytketty pois päältä.");
                 musicManager.setSpeakerEnabled(player, false);
                 speaker.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<red>Pois päältä")));
             }else {
                 if (musicManager.getAutoEnabled(player)){
-                    player.sendMessage(toMM("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!"));
+                    player.sendRichMessage("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!");
                 }
-                player.sendMessage("Kaiutintila kytketty päälle.");
+                player.sendRichMessage("Kaiutintila kytketty päälle.");
                 musicManager.setSpeakerEnabled(player, true);
                 speaker.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<green>Päällä")));
             }
