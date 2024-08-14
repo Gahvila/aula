@@ -147,18 +147,28 @@ public class MusicMenu {
 
         ItemStack pause = new ItemStack(Material.BARRIER);
         ItemMeta pauseMeta = pause.getItemMeta();
-        pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
+        if (musicManager.getSongPlayer(player).isPlaying()){
+            pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
+        } else if (!musicManager.getSongPlayer(player).isPlaying()) {
+            pauseMeta.displayName(toUndecoratedMM("<red><b>Jatka"));
+        } else {
+            pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
+        }
+        pauseMeta.lore(List.of(toUndecoratedMM("<white>Oikea: <yellow>keskeytä/jatka"), toUndecoratedMM("<white>Vasen: <yellow>lopeta soitto")));
         pause.setItemMeta(pauseMeta);
         navigationPane.addItem(new GuiItem(pause, event -> {
-            if (event.getClick().isLeftClick()) {
+            if (event.getClick().isRightClick()) {
                 if (musicManager.getSongPlayer(player) != null) {
                     if (musicManager.getSongPlayer(player).isPlaying()) {
+                        event.getCurrentItem().getItemMeta().displayName(toUndecoratedMM("<red><b>Jatka"));
                         musicManager.getSongPlayer(player).setPlaying(false);
                     } else {
+                        event.getCurrentItem().getItemMeta().displayName(toUndecoratedMM("<red><b>Keskeytä"));
                         musicManager.getSongPlayer(player).setPlaying(true);
                     }
                 }
-            } else if (event.getClick().isShiftClick()) {
+            } else if (event.getClick().isLeftClick()) {
+                event.getCurrentItem().getItemMeta().displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
                 musicManager.clearSongPlayer(player);
             }
         }), 1, 0);
