@@ -108,9 +108,9 @@ public class MusicMenu {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
                 musicManager.clearSongPlayer(player);
                 if (!musicManager.getSpeakerEnabled(player)) {
-                    createSP(player, song, (short) 0);
+                    createSP(player, song, (short) -5);
                 } else if (musicManager.getSpeakerEnabled(player)) {
-                    createESP(player, song, (short) 0);
+                    createESP(player, song, (short) -5);
                 }
                 player.sendRichMessage("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan.");
                 gui.update();
@@ -160,6 +160,10 @@ public class MusicMenu {
             if (musicManager.getAutoEnabled(player)){
                 player.sendRichMessage("Jatkuva toisto kytketty pois päältä.");
                 musicManager.setAutoEnabled(player, false);
+                if (musicManager.getSongPlayer(player) != null) {
+                    SongPlayer sp = musicManager.getSongPlayer(player);
+                    createSP(player, sp.getSong(), sp.getTick());
+                }
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<red>Pois päältä")));
             }else {
                 if (musicManager.getSpeakerEnabled(player)){
@@ -167,9 +171,12 @@ public class MusicMenu {
                 }
                 player.sendRichMessage("Jatkuva toisto kytketty päälle.");
                 musicManager.setAutoEnabled(player, true);
+                if (musicManager.getSongPlayer(player) != null) {
+                    SongPlayer sp = musicManager.getSongPlayer(player);
+                    createSP(player, sp.getSong(), sp.getTick());
+                }
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<green>Päällä")));
             }
-            musicManager.clearSongPlayer(player);
             gui.update();
         }), 2, 0);
 
@@ -267,12 +274,17 @@ public class MusicMenu {
         rsp.addPlayer(player);
         rsp.setTick(tick);
         rsp.setPlaying(true);
-        ArrayList<Song> songs = musicManager.getSongs();
-        for (Song playlistSong : songs) {
-            playlist.add(playlistSong);
+        if (musicManager.getAutoEnabled(player)) {
+            ArrayList<Song> songs = musicManager.getSongs();
+            for (Song playlistSong : songs) {
+                playlist.add(playlistSong);
+            }
+            rsp.setRandom(true);
+            rsp.setRepeatMode(RepeatMode.ALL);
+        } else {
+            rsp.setRandom(false);
+            rsp.setRepeatMode(RepeatMode.NO);
         }
-        rsp.setRandom(true);
-        rsp.setRepeatMode(RepeatMode.ALL);
         musicManager.saveSongPlayer(player, rsp);
         Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, rsp), 5);
     }

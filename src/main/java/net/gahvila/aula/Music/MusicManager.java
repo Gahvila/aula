@@ -113,7 +113,7 @@ public class MusicManager {
                 return;
             }
             progressBar.progress((float) progress);
-        }, 0L, 1);
+        }, 10L, 5);
         if (songPlayer instanceof EntitySongPlayer){
             Bukkit.getScheduler().runTaskTimer(instance, task2 -> {
                 double progress = (double) songPlayer.getTick() / length;
