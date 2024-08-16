@@ -15,9 +15,11 @@ import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
 import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
+import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import net.gahvila.aula.Utils.WorldGuardRegionChecker;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -106,36 +108,12 @@ public class MusicMenu {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
                 musicManager.clearSongPlayer(player);
                 if (!musicManager.getSpeakerEnabled(player)) {
-                    Playlist playlist = new Playlist(song);
-                    RadioSongPlayer rsp = new RadioSongPlayer(playlist);
-                    rsp.setChannelMode(new MonoStereoMode());
-                    rsp.setVolume((byte) 45);
-                    rsp.addPlayer(player);
-                    rsp.setPlaying(true);
-                    ArrayList<Song> songs = musicManager.getSongs();
-                    for (Song playlistSong : songs) {
-                        playlist.add(playlistSong);
-                    }
-                    rsp.setRandom(true);
-                    rsp.setRepeatMode(RepeatMode.ALL);
-                    musicManager.saveSongPlayer(player, rsp);
-                    Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, rsp), 5);
+                    createSP(player, song, (short) 0);
                 } else if (musicManager.getSpeakerEnabled(player)) {
-                    EntitySongPlayer esp = new EntitySongPlayer(song);
-                    esp.setEntity(player);
-                    esp.setVolume((byte) 45);
-                    esp.setDistance(8);
-                    esp.setPlaying(true);
-
-                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                        if (!WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
-                            esp.addPlayer(onlinePlayer);
-                        }
-                    }
-                    musicManager.saveSongPlayer(player, esp);
-                    Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, esp), 5);
+                    createESP(player, song, (short) 0);
                 }
                 player.sendRichMessage("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan.");
+                gui.update();
             }else {
                 player.closeInventory();
                 player.sendRichMessage("VIRHE: Tuota kappaletta ei ole olemassa.");
@@ -147,30 +125,26 @@ public class MusicMenu {
 
         ItemStack pause = new ItemStack(Material.BARRIER);
         ItemMeta pauseMeta = pause.getItemMeta();
-        if (musicManager.getSongPlayer(player).isPlaying()){
+        if (musicManager.getSongPlayer(player) == null) {
+            pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
+        } else if (musicManager.getSongPlayer(player).isPlaying()){
             pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
         } else if (!musicManager.getSongPlayer(player).isPlaying()) {
             pauseMeta.displayName(toUndecoratedMM("<red><b>Jatka"));
         } else {
             pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
         }
-        pauseMeta.lore(List.of(toUndecoratedMM("<white>Oikea: <yellow>keskeytä/jatka"), toUndecoratedMM("<white>Vasen: <yellow>lopeta soitto")));
+        pauseMeta.lore(List.of(toUndecoratedMM("<white>Vasen: <yellow>keskeytä/jatka"), toUndecoratedMM("<white>Oikea: <yellow>lopeta soitto")));
         pause.setItemMeta(pauseMeta);
         navigationPane.addItem(new GuiItem(pause, event -> {
-            if (event.getClick().isRightClick()) {
+            if (event.getClick().isLeftClick()) {
                 if (musicManager.getSongPlayer(player) != null) {
-                    if (musicManager.getSongPlayer(player).isPlaying()) {
-                        event.getCurrentItem().getItemMeta().displayName(toUndecoratedMM("<red><b>Jatka"));
-                        musicManager.getSongPlayer(player).setPlaying(false);
-                    } else {
-                        event.getCurrentItem().getItemMeta().displayName(toUndecoratedMM("<red><b>Keskeytä"));
-                        musicManager.getSongPlayer(player).setPlaying(true);
-                    }
+                    musicManager.getSongPlayer(player).setPlaying(!musicManager.getSongPlayer(player).isPlaying());
                 }
-            } else if (event.getClick().isLeftClick()) {
-                event.getCurrentItem().getItemMeta().displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
+            } else if (event.getClick().isRightClick()) {
                 musicManager.clearSongPlayer(player);
             }
+            gui.update();
         }), 1, 0);
 
         ItemStack autoplay = new ItemStack(Material.REDSTONE);
@@ -212,6 +186,10 @@ public class MusicMenu {
             if (musicManager.getSpeakerEnabled(player)){
                 player.sendRichMessage("Kaiutintila kytketty pois päältä.");
                 musicManager.setSpeakerEnabled(player, false);
+                if (musicManager.getSongPlayer(player) != null) {
+                    SongPlayer sp = musicManager.getSongPlayer(player);
+                    createSP(player, sp.getSong(), sp.getTick());
+                }
                 speaker.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<red>Pois päältä")));
             }else {
                 if (musicManager.getAutoEnabled(player)){
@@ -219,9 +197,12 @@ public class MusicMenu {
                 }
                 player.sendRichMessage("Kaiutintila kytketty päälle.");
                 musicManager.setSpeakerEnabled(player, true);
+                if (musicManager.getSongPlayer(player) != null) {
+                    SongPlayer sp = musicManager.getSongPlayer(player);
+                    createESP(player, sp.getSong(), sp.getTick());
+                }
                 speaker.lore(List.of(toUndecoratedMM("<gray>Soittaa kappaleesi ympärillä"), toUndecoratedMM("<gray>oleville pelaajille."), toUndecoratedMM("<green>Päällä")));
             }
-            musicManager.clearSongPlayer(player);
             gui.update();
         }), 3, 0);
 
@@ -251,6 +232,66 @@ public class MusicMenu {
         }), 7, 0);
         gui.addPane(navigationPane);
 
+        gui.setOnGlobalClick(event2 -> {
+            Bukkit.getScheduler().runTaskLater(instance, task -> {
+                if (event2.getClick().isLeftClick()) {
+                    if (musicManager.getSongPlayer(player) != null) {
+                        if (musicManager.getSongPlayer(player).isPlaying()) {
+                            pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
+                            pause.setItemMeta(pauseMeta);
+                            gui.update();
+                        } else {
+                            pauseMeta.displayName(toUndecoratedMM("<red><b>Jatka"));
+                            pause.setItemMeta(pauseMeta);
+                            gui.update();
+                        }
+                    }
+                } else if (event2.getClick().isRightClick()) {
+                    pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
+                    pause.setItemMeta(pauseMeta);
+                    gui.update();
+                }
+            }, 1);
+            event2.setCancelled(true);
+        });
+
         gui.update();
+    }
+
+    public void createSP(Player player, Song song, short tick) {
+        musicManager.clearSongPlayer(player);
+        Playlist playlist = new Playlist(song);
+        RadioSongPlayer rsp = new RadioSongPlayer(playlist);
+        rsp.setChannelMode(new MonoStereoMode());
+        rsp.setVolume((byte) 45);
+        rsp.addPlayer(player);
+        rsp.setTick(tick);
+        rsp.setPlaying(true);
+        ArrayList<Song> songs = musicManager.getSongs();
+        for (Song playlistSong : songs) {
+            playlist.add(playlistSong);
+        }
+        rsp.setRandom(true);
+        rsp.setRepeatMode(RepeatMode.ALL);
+        musicManager.saveSongPlayer(player, rsp);
+        Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, rsp), 5);
+    }
+
+    public void createESP(Player player, Song song, short tick) {
+        musicManager.clearSongPlayer(player);
+        EntitySongPlayer esp = new EntitySongPlayer(song);
+        esp.setEntity(player);
+        esp.setVolume((byte) 45);
+        esp.setDistance(8);
+        esp.setTick(tick);
+        esp.setPlaying(true);
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (!WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
+                esp.addPlayer(onlinePlayer);
+            }
+        }
+        musicManager.saveSongPlayer(player, esp);
+        Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, esp), 5);
     }
 }
