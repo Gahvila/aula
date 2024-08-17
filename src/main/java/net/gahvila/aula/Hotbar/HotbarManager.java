@@ -1,5 +1,7 @@
 package net.gahvila.aula.Hotbar;
 
+import net.gahvila.aula.Utils.WorldGuardRegionChecker;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -9,6 +11,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.HashMap;
 
+import static net.gahvila.aula.Aula.instance;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
 
 public class HotbarManager {
@@ -45,6 +48,7 @@ public class HotbarManager {
             }
             player.getInventory().setItem(i, temppa);
         }
+        currentHotbar.put(player, hotbarType);
     }
 
     protected static ItemStack createItem(Material material, String name) {
@@ -54,5 +58,19 @@ public class HotbarManager {
         itemMeta.displayName(toUndecoratedMM(name));
         item.setItemMeta(itemMeta);
         return item;
+    }
+
+    public void scheduleHotbarChecker() {
+        Bukkit.getScheduler().runTaskTimer(instance, task -> {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
+                    if (getCurrentHotbar(onlinePlayer) == Hotbar.SPAWN) return;
+                    giveHotbar(onlinePlayer, Hotbar.SPAWN);
+                } else {
+                    if (getCurrentHotbar(onlinePlayer) == Hotbar.DEFAULT) return;
+                    giveHotbar(onlinePlayer, Hotbar.DEFAULT);
+                }
+            }
+        }, 0L, 15L);
     }
 }

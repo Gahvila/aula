@@ -23,7 +23,7 @@ public class HotbarEvent implements Listener {
         Player player = event.getPlayer();
         if (hotbarManager.getHotbarEnabled(player)) {
             player.getInventory().setHeldItemSlot(4);
-            hotbarManager.giveHotbar(player, Hotbar.DEFAULT);
+            hotbarManager.giveHotbar(player, Hotbar.SPAWN);
         }
     }
 
@@ -33,13 +33,20 @@ public class HotbarEvent implements Listener {
         if (hotbarManager.getHotbarEnabled(player)) {
             event.setCancelled(true);
             if (!(event.getHand() == EquipmentSlot.HAND)) return;
+            int slot = player.getInventory().getHeldItemSlot();
             switch (hotbarManager.getCurrentHotbar(player)) {
                 case DEFAULT:
-                    int slot = player.getInventory().getHeldItemSlot();
                     if (slot == 1) {
                         player.performCommand("profile");
                     } else if (slot == 4) {
                         player.performCommand("serverselector");
+                    } else if (slot == 7) {
+                        player.performCommand("music");
+                    }
+                    break;
+                case SPAWN:
+                    if (slot == 1) {
+                        player.performCommand("profile");
                     } else if (slot == 7) {
                         player.performCommand("music");
                     }

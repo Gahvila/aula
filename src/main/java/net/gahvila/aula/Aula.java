@@ -62,6 +62,7 @@ public final class Aula extends JavaPlugin {
         //hotbar
         HotbarManager hotbarManager = new HotbarManager();
         registerListeners(new HotbarEvent(hotbarManager));
+        hotbarManager.scheduleHotbarChecker();
 
         //serverselector
         ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
