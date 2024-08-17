@@ -168,21 +168,33 @@ public class MusicMenu {
             if (musicManager.getAutoEnabled(player)){
                 player.sendRichMessage("Jatkuva toisto kytketty pois päältä.");
                 musicManager.setAutoEnabled(player, false);
-                if (musicManager.getSongPlayer(player) != null) {
-                    SongPlayer sp = musicManager.getSongPlayer(player);
-                    createSP(player, sp.getSong(), sp.getTick());
+                if (musicManager.getSpeakerEnabled(player)){
+                    if (musicManager.getSongPlayer(player) != null) {
+                        SongPlayer sp = musicManager.getSongPlayer(player);
+                        createESP(player, sp.getSong(), sp.getTick());
+                    }
+                } else {
+                    if (musicManager.getSongPlayer(player) != null) {
+                        SongPlayer sp = musicManager.getSongPlayer(player);
+                        createSP(player, sp.getSong(), sp.getTick());
+                    }
                 }
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<red>Pois päältä")));
             }else {
                 if (musicManager.getSpeakerEnabled(player)){
                     player.sendRichMessage("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!");
+                    if (musicManager.getSongPlayer(player) != null) {
+                        SongPlayer sp = musicManager.getSongPlayer(player);
+                        createESP(player, sp.getSong(), sp.getTick());
+                    }
+                } else {
+                    if (musicManager.getSongPlayer(player) != null) {
+                        SongPlayer sp = musicManager.getSongPlayer(player);
+                        createSP(player, sp.getSong(), sp.getTick());
+                    }
                 }
                 player.sendRichMessage("Jatkuva toisto kytketty päälle.");
                 musicManager.setAutoEnabled(player, true);
-                if (musicManager.getSongPlayer(player) != null) {
-                    SongPlayer sp = musicManager.getSongPlayer(player);
-                    createSP(player, sp.getSong(), sp.getTick());
-                }
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<green>Päällä")));
             }
             gui.update();
