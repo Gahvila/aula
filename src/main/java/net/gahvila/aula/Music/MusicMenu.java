@@ -19,22 +19,16 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import net.gahvila.aula.Utils.WorldGuardRegionChecker;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import static net.gahvila.aula.Aula.instance;
-import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
 
 public class MusicMenu {
@@ -108,9 +102,9 @@ public class MusicMenu {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6F, 1F);
                 musicManager.clearSongPlayer(player);
                 if (!musicManager.getSpeakerEnabled(player)) {
-                    createSP(player, song, (short) -5);
+                    createSP(player, song, null);
                 } else if (musicManager.getSpeakerEnabled(player)) {
-                    createESP(player, song, (short) -5);
+                    createESP(player, song, null);
                 }
                 player.sendRichMessage("<white>Laitoit kappaleen <yellow>" + songName + "</yellow> <white>soimaan.");
                 gui.update();
@@ -289,14 +283,16 @@ public class MusicMenu {
         gui.update();
     }
 
-    public void createSP(Player player, Song song, short tick) {
+    public void createSP(Player player, Song song, Short tick) {
         musicManager.clearSongPlayer(player);
         Playlist playlist = new Playlist(song);
         RadioSongPlayer rsp = new RadioSongPlayer(playlist);
         rsp.setChannelMode(new MonoStereoMode());
         rsp.setVolume((byte) 45);
         rsp.addPlayer(player);
-        rsp.setTick(tick);
+        if (tick != null){
+            rsp.setTick(tick);
+        }
         rsp.setPlaying(true);
         if (musicManager.getAutoEnabled(player)) {
             ArrayList<Song> songs = musicManager.getSongs();
@@ -313,13 +309,15 @@ public class MusicMenu {
         Bukkit.getScheduler().runTaskLater(instance, () -> musicManager.songPlayerSchedule(player, rsp), 5);
     }
 
-    public void createESP(Player player, Song song, short tick) {
+    public void createESP(Player player, Song song, Short tick) {
         musicManager.clearSongPlayer(player);
         EntitySongPlayer esp = new EntitySongPlayer(song);
         esp.setEntity(player);
         esp.setVolume((byte) 45);
         esp.setDistance(8);
-        esp.setTick(tick);
+        if (tick != null){
+            esp.setTick(tick);
+        }
         esp.setPlaying(true);
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {

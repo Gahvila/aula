@@ -124,7 +124,7 @@ public class MusicManager {
                         songPlayer.getSong().getTitle() + "</aqua>"));
                 progressBar.color(BossBar.Color.BLUE);
             }
-        }, 10L, 5);
+        }, 0, 1);
 
         if (songPlayer instanceof EntitySongPlayer){
             Bukkit.getScheduler().runTaskTimer(instance, task2 -> {
