@@ -31,7 +31,6 @@ public class HotbarEvent implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (hotbarManager.getHotbarEnabled(player)) {
-            event.setCancelled(true);
             if (!(event.getHand() == EquipmentSlot.HAND)) return;
             int slot = player.getInventory().getHeldItemSlot();
             switch (hotbarManager.getCurrentHotbar(player)) {
