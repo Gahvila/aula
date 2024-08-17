@@ -12,7 +12,7 @@ import static net.gahvila.aula.Aula.instance;
 
 public class TeleportManager {
 
-    public HashMap<String, Location> teleportCache = new HashMap<>();
+    public static HashMap<String, Location> teleportCache = new HashMap<>();
 
     public void saveTeleport(String type, Location location) {
         Json tpData = new Json("teleportdata.json", instance.getDataFolder() + "/data/");
@@ -26,6 +26,15 @@ public class TeleportManager {
     }
 
     public Location getTeleport(String type) {
+        if (!teleportCache.containsKey(type)) {
+            putTeleportsIntoCache();
+            Bukkit.getLogger().info("Location " + type + " was not found in cache, added.");
+        }
+
+        if (teleportCache.get(type) == null) {
+            Bukkit.getLogger().warning("Location " + type + " not found in cache, reading from disk.");
+            return getTeleportFromStorage(type);
+        }
         return teleportCache.get(type);
     }
 

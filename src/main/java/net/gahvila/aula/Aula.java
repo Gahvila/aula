@@ -75,7 +75,6 @@ public final class Aula extends JavaPlugin {
 
         //general
         TeleportManager teleportManager = new TeleportManager();
-        Bukkit.getScheduler().runTaskLater(instance, teleportManager::putTeleportsIntoCache, 20L);
 
         timeSyncScheduler();
 

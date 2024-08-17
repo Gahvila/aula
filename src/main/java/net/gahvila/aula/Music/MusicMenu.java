@@ -137,9 +137,11 @@ public class MusicMenu {
 
             if (event.getClick().isLeftClick()) {
                 if (musicManager.getSongPlayer(player) != null) {
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 1F);
                     musicManager.getSongPlayer(player).setPlaying(!musicManager.getSongPlayer(player).isPlaying());
                 }
             } else if (event.getClick().isRightClick()) {
+                player.playSound(player.getLocation(), Sound.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, 0.8F, 1F);
                 musicManager.clearSongPlayer(player);
             }
             gui.update();
@@ -160,6 +162,7 @@ public class MusicMenu {
             Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
 
             if (musicManager.getAutoEnabled(player)){
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 0.7F);
                 player.sendRichMessage("Jatkuva toisto kytketty pois päältä.");
                 musicManager.setAutoEnabled(player, false);
                 if (musicManager.getSpeakerEnabled(player)){
@@ -187,6 +190,7 @@ public class MusicMenu {
                         createSP(player, sp.getSong(), sp.getTick());
                     }
                 }
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 0.8F);
                 player.sendRichMessage("Jatkuva toisto kytketty päälle.");
                 musicManager.setAutoEnabled(player, true);
                 autoplay.lore(List.of(toUndecoratedMM("<gray>Toistaa jatkuvasti"), toUndecoratedMM("<gray>uusia kappaleita."), toUndecoratedMM("<green>Päällä")));
@@ -209,6 +213,7 @@ public class MusicMenu {
             Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
 
             if (musicManager.getSpeakerEnabled(player)){
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 0.7F);
                 player.sendRichMessage("Kaiutintila kytketty pois päältä.");
                 musicManager.setSpeakerEnabled(player, false);
                 if (musicManager.getSongPlayer(player) != null) {
@@ -220,6 +225,7 @@ public class MusicMenu {
                 if (musicManager.getAutoEnabled(player)){
                     player.sendRichMessage("<red>Jatkuva toisto ei ole käytössä kaiutintilan päällä ollessa!");
                 }
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 0.8F);
                 player.sendRichMessage("Kaiutintila kytketty päälle.");
                 musicManager.setSpeakerEnabled(player, true);
                 if (musicManager.getSongPlayer(player) != null) {
@@ -314,7 +320,7 @@ public class MusicMenu {
         EntitySongPlayer esp = new EntitySongPlayer(song);
         esp.setEntity(player);
         esp.setVolume((byte) 45);
-        esp.setDistance(8);
+        esp.setDistance(24);
         if (tick != null){
             esp.setTick(tick);
         }
