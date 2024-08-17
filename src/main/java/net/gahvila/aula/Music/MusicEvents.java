@@ -12,8 +12,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Set;
 import java.util.UUID;
 
-import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;
-
 public class MusicEvents implements Listener {
 
     private final MusicManager musicManager;

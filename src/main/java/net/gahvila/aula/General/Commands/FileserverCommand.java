@@ -2,8 +2,6 @@ package net.gahvila.aula.General.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
 
-import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;
-
 public class FileserverCommand {
     public void registerCommands() {
         new CommandAPICommand("latauspalvelin")

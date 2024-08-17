@@ -1,7 +1,6 @@
 package net.gahvila.aula.Spawn;
 
 import net.gahvila.aula.Teleport.TeleportManager;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +17,6 @@ public class SpawnTeleport implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location loc = teleportManager.getTeleport("spawn");
-        player.teleport(loc);
+        player.teleport(teleportManager.getTeleport("spawn"));
     }
 }

@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.gahvila.aula.Aula.instance;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;

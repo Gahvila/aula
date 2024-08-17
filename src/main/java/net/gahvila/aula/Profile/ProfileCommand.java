@@ -1,7 +1,6 @@
 package net.gahvila.aula.Profile;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import net.gahvila.aula.ServerSelector.ServerSelectorMenu;
 import org.bukkit.Sound;
 
 public class ProfileCommand {

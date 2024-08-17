@@ -3,14 +3,10 @@ package net.gahvila.aula.Profile;
 import com.github.stefvanschie.inventoryframework.adventuresupport.ComponentHolder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import net.gahvila.aula.Utils.MenuItemCreator;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -22,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 
 import static net.gahvila.aula.Aula.instance;
-import static net.gahvila.aula.Utils.MenuItemCreator.*;
+import static net.gahvila.aula.Utils.MenuItemCreator.itemCreator;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
 

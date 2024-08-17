@@ -1,9 +1,9 @@
 package net.gahvila.aula.General.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import net.gahvila.aula.Teleport.TeleportManager;
 import net.gahvila.aula.Hotbar.HotbarManager;
 import net.gahvila.aula.Music.MusicManager;
+import net.gahvila.aula.Teleport.TeleportManager;
 
 public class AulaAdminCommand {
 
