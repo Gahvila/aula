@@ -1,4 +1,4 @@
-package net.gahvila.aula.General.Managers;
+package net.gahvila.aula.Teleport;
 
 import de.leonhard.storage.Json;
 import org.bukkit.Bukkit;

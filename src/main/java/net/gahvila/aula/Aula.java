@@ -7,8 +7,7 @@ import net.gahvila.aula.General.Commands.FileserverCommand;
 import net.gahvila.aula.General.Events.PlayerDamage;
 import net.gahvila.aula.General.Events.PlayerJoin;
 import net.gahvila.aula.General.Events.PlayerLeave;
-import net.gahvila.aula.General.Events.WorldLoad;
-import net.gahvila.aula.General.Managers.TeleportManager;
+import net.gahvila.aula.Teleport.TeleportManager;
 import net.gahvila.aula.Hotbar.HotbarEvent;
 import net.gahvila.aula.Hotbar.HotbarManager;
 import net.gahvila.aula.Music.MusicCommand;
@@ -23,9 +22,7 @@ import net.gahvila.aula.Spawn.SpawnCommand;
 import net.gahvila.aula.Spawn.SpawnTeleport;
 import net.gahvila.aula.Utils.EmptyChunkGenerator;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,7 +45,7 @@ public final class Aula extends JavaPlugin {
         teleportManager = new TeleportManager();
 
 
-        registerListeners(new WorldLoad(teleportManager), new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
+        registerListeners(new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
                 new PlayerDamage());
 
         //commandapi

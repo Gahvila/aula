@@ -137,6 +137,10 @@ public class MusicMenu {
         pauseMeta.lore(List.of(toUndecoratedMM("<white>Vasen: <yellow>keskeytä/jatka"), toUndecoratedMM("<white>Oikea: <yellow>lopeta soitto")));
         pause.setItemMeta(pauseMeta);
         navigationPane.addItem(new GuiItem(pause, event -> {
+            if (cooldown.contains(player)) return;
+            cooldown.add(player);
+            Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 10);
+
             if (event.getClick().isLeftClick()) {
                 if (musicManager.getSongPlayer(player) != null) {
                     musicManager.getSongPlayer(player).setPlaying(!musicManager.getSongPlayer(player).isPlaying());
@@ -157,6 +161,10 @@ public class MusicMenu {
         }
         autoplay.setItemMeta(autoplayMeta);
         navigationPane.addItem(new GuiItem(autoplay, event -> {
+            if (cooldown.contains(player)) return;
+            cooldown.add(player);
+            Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
+
             if (musicManager.getAutoEnabled(player)){
                 player.sendRichMessage("Jatkuva toisto kytketty pois päältä.");
                 musicManager.setAutoEnabled(player, false);
@@ -190,6 +198,10 @@ public class MusicMenu {
         }
         speaker.setItemMeta(speakerMeta);
         navigationPane.addItem(new GuiItem(speaker, event -> {
+            if (cooldown.contains(player)) return;
+            cooldown.add(player);
+            Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
+
             if (musicManager.getSpeakerEnabled(player)){
                 player.sendRichMessage("Kaiutintila kytketty pois päältä.");
                 musicManager.setSpeakerEnabled(player, false);

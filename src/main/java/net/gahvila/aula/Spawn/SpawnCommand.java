@@ -1,12 +1,9 @@
 package net.gahvila.aula.Spawn;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import net.gahvila.aula.General.Managers.TeleportManager;
-import org.bukkit.Bukkit;
+import net.gahvila.aula.Teleport.TeleportManager;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-
-import java.util.function.Supplier;
 
 import static java.lang.Float.MAX_VALUE;
 

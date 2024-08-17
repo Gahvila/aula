@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.gahvila.aula.Aula.instance;
 import static net.gahvila.aula.Utils.MiniMessageUtils.toMM;
@@ -102,6 +103,7 @@ public class MusicManager {
 
     public void songPlayerSchedule(Player player, SongPlayer songPlayer) {
         double length = songPlayer.getSong().getLength();
+        AtomicBoolean pauseflash = new AtomicBoolean(false);
         BossBar progressBar = BossBar.bossBar(toMM("<aqua>" + songPlayer.getSong().getOriginalAuthor() + " - " +
                 songPlayer.getSong().getTitle() + "</aqua>"), 0f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS);
         player.showBossBar(progressBar);
@@ -114,6 +116,33 @@ public class MusicManager {
             }
             progressBar.progress((float) progress);
         }, 10L, 5);
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(instance, task -> {
+            double progress = (double) songPlayer.getTick() / length;
+            if (progress >= 1.0 || progress < 0){
+                progressBar.removeViewer(player);
+                task.cancel();
+            }
+
+            if (!songPlayer.isPlaying()){
+                if (!pauseflash.get()) {
+                    pauseflash.set(true);
+                    progressBar.name(toMM("<red>" + songPlayer.getSong().getOriginalAuthor() + " - " +
+                            songPlayer.getSong().getTitle() + "</red>"));
+                    progressBar.color(BossBar.Color.RED);
+                }else {
+                    pauseflash.set(false);
+                    progressBar.name(toMM("<aqua>" + songPlayer.getSong().getOriginalAuthor() + " - " +
+                            songPlayer.getSong().getTitle() + "</aqua>"));
+                    progressBar.color(BossBar.Color.BLUE);
+                }
+            } else {
+                progressBar.name(toMM("<aqua>" + songPlayer.getSong().getOriginalAuthor() + " - " +
+                        songPlayer.getSong().getTitle() + "</aqua>"));
+                progressBar.color(BossBar.Color.BLUE);
+            }
+        }, 10L, 60);
+
         if (songPlayer instanceof EntitySongPlayer){
             Bukkit.getScheduler().runTaskTimer(instance, task2 -> {
                 double progress = (double) songPlayer.getTick() / length;
@@ -129,7 +158,7 @@ public class MusicManager {
                         songPlayer.removePlayer(onlinePlayer);
                     }
                 }
-            }, 0L, 10);
+            }, 10L, 10);
         }
     }
 }
