@@ -9,6 +9,8 @@ import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
+import com.xxmicloxx.NoteBlockAPI.event.SongDestroyingEvent;
+import com.xxmicloxx.NoteBlockAPI.event.SongStoppedEvent;
 import com.xxmicloxx.NoteBlockAPI.model.Playlist;
 import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
@@ -22,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
@@ -113,7 +116,7 @@ public class MusicMenu {
                 gui.update();
             }else {
                 player.closeInventory();
-                player.sendRichMessage("VIRHE: Tuota kappaletta ei ole olemassa.");
+                Bukkit.getLogger().severe("player attempted to play a song that doesn't exist");
             }
         });
 
@@ -122,15 +125,7 @@ public class MusicMenu {
 
         ItemStack pause = new ItemStack(Material.BARRIER);
         ItemMeta pauseMeta = pause.getItemMeta();
-        if (musicManager.getSongPlayer(player) == null) {
-            pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
-        } else if (musicManager.getSongPlayer(player).isPlaying()){
-            pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
-        } else if (!musicManager.getSongPlayer(player).isPlaying()) {
-            pauseMeta.displayName(toUndecoratedMM("<red><b>Jatka"));
-        } else {
-            pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
-        }
+        pauseMeta.displayName(toUndecoratedMM("<white><b>Keskeytä/Jatka"));
         pauseMeta.lore(List.of(toUndecoratedMM("<white>Vasen: <yellow>keskeytä/jatka"), toUndecoratedMM("<white>Oikea: <yellow>lopeta soitto")));
         pause.setItemMeta(pauseMeta);
         navigationPane.addItem(new GuiItem(pause, event -> {
@@ -144,7 +139,7 @@ public class MusicMenu {
                     musicManager.getSongPlayer(player).setPlaying(!musicManager.getSongPlayer(player).isPlaying());
                 }
             } else if (event.getClick().isRightClick()) {
-                player.playSound(player.getLocation(), Sound.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, 0.8F, 1F);
+                player.playSound(player.getLocation(), Sound.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, 1F, 1F);
                 musicManager.clearSongPlayer(player);
             }
             gui.update();
@@ -265,37 +260,6 @@ public class MusicMenu {
             }
         }), 7, 0);
         gui.addPane(navigationPane);
-
-        gui.setOnGlobalClick(event2 -> {
-            Bukkit.getScheduler().runTaskLater(instance, task -> {
-                if (event2.getClick().isLeftClick()) {
-                    if (musicManager.getSongPlayer(player) != null) {
-                        if (cooldown.contains(player)) return;
-                        cooldown.add(player);
-                        Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
-
-                        if (musicManager.getSongPlayer(player).isPlaying()) {
-                            pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
-                            pause.setItemMeta(pauseMeta);
-                            gui.update();
-                        } else {
-                            pauseMeta.displayName(toUndecoratedMM("<red><b>Jatka"));
-                            pause.setItemMeta(pauseMeta);
-                            gui.update();
-                        }
-                    }
-                } else if (event2.getClick().isRightClick()) {
-                    if (cooldown.contains(player)) return;
-                    cooldown.add(player);
-                    Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
-
-                    pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
-                    pause.setItemMeta(pauseMeta);
-                    gui.update();
-                }
-            }, 1);
-            event2.setCancelled(true);
-        });
 
         gui.update();
     }
