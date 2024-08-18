@@ -270,6 +270,10 @@ public class MusicMenu {
             Bukkit.getScheduler().runTaskLater(instance, task -> {
                 if (event2.getClick().isLeftClick()) {
                     if (musicManager.getSongPlayer(player) != null) {
+                        if (cooldown.contains(player)) return;
+                        cooldown.add(player);
+                        Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
+
                         if (musicManager.getSongPlayer(player).isPlaying()) {
                             pauseMeta.displayName(toUndecoratedMM("<red><b>Keskeytä"));
                             pause.setItemMeta(pauseMeta);
@@ -281,6 +285,10 @@ public class MusicMenu {
                         }
                     }
                 } else if (event2.getClick().isRightClick()) {
+                    if (cooldown.contains(player)) return;
+                    cooldown.add(player);
+                    Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 20);
+
                     pauseMeta.displayName(toUndecoratedMM("<red><b>Ei kappaletta soitossa"));
                     pause.setItemMeta(pauseMeta);
                     gui.update();
