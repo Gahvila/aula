@@ -64,11 +64,13 @@ public class HotbarManager {
         Bukkit.getScheduler().runTaskTimer(instance, task -> {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
-                    if (getCurrentHotbar(onlinePlayer) == Hotbar.SPAWN) return;
-                    giveHotbar(onlinePlayer, Hotbar.SPAWN);
+                    if (getCurrentHotbar(onlinePlayer) != Hotbar.SPAWN) {
+                        giveHotbar(onlinePlayer, Hotbar.SPAWN);
+                    }
                 } else {
-                    if (getCurrentHotbar(onlinePlayer) == Hotbar.DEFAULT) return;
-                    giveHotbar(onlinePlayer, Hotbar.DEFAULT);
+                    if (getCurrentHotbar(onlinePlayer) != Hotbar.DEFAULT) {
+                        giveHotbar(onlinePlayer, Hotbar.DEFAULT);
+                    }
                 }
             }
         }, 0L, 15L);
