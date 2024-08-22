@@ -4,6 +4,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.gahvila.aula.General.Commands.AulaAdminCommand;
 import net.gahvila.aula.General.Commands.FileserverCommand;
+import net.gahvila.aula.General.Commands.FlyCommand;
 import net.gahvila.aula.General.Events.PlayerDamage;
 import net.gahvila.aula.General.Events.PlayerJoin;
 import net.gahvila.aula.General.Events.PlayerLeave;
@@ -81,6 +82,9 @@ public final class Aula extends JavaPlugin {
 
         FileserverCommand fileserverCommand = new FileserverCommand();
         fileserverCommand.registerCommands();
+
+        FlyCommand flyCommand = new FlyCommand();
+        flyCommand.registerCommands();
 
         AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, musicManager, hotbarManager);
         aulaAdminCommand.registerCommands();
