@@ -137,7 +137,9 @@ public class MusicManager {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     if (!WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
                         songPlayer.addPlayer(onlinePlayer);
-                        onlinePlayer.spawnParticle(Particle.NOTE, player.getLocation().add(0, 2, 0), 1);
+                        if (songPlayer.isPlaying()){
+                            onlinePlayer.spawnParticle(Particle.NOTE, player.getLocation().add(0, 2, 0), 1);
+                        }
                     } else {
                         songPlayer.removePlayer(onlinePlayer);
                     }
