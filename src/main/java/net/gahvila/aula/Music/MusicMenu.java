@@ -18,6 +18,8 @@ import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
 import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
+import net.draycia.carbon.api.CarbonChatProvider;
+import net.draycia.carbon.api.users.CarbonPlayer;
 import net.gahvila.aula.Utils.WorldGuardRegionChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -303,7 +305,12 @@ public class MusicMenu {
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!WorldGuardRegionChecker.isInRegion(onlinePlayer, "spawn")){
-                esp.addPlayer(onlinePlayer);
+                if(Bukkit.getServer().getPluginManager().getPlugin("CarbonChat") != null) {
+                    CarbonPlayer carbonPlayer = CarbonChatProvider.carbonChat().userManager().user(onlinePlayer.getUniqueId()).getNow(null);
+                    if (!carbonPlayer.ignoring(esp.getEntity().getUniqueId())) {
+                        esp.addPlayer(onlinePlayer);
+                    }
+                }
             }
         }
         musicManager.saveSongPlayer(player, esp);

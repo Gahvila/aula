@@ -5,6 +5,8 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.EntitySongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import de.leonhard.storage.Json;
+import net.draycia.carbon.api.CarbonChatProvider;
+import net.draycia.carbon.api.users.CarbonPlayer;
 import net.gahvila.aula.Utils.WorldGuardRegionChecker;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
@@ -138,6 +140,13 @@ public class MusicManager {
                         onlinePlayer.spawnParticle(Particle.NOTE, player.getLocation().add(0, 2, 0), 1);
                     } else {
                         songPlayer.removePlayer(onlinePlayer);
+                    }
+
+                    if(Bukkit.getServer().getPluginManager().getPlugin("CarbonChat") != null) {
+                        CarbonPlayer carbonPlayer = CarbonChatProvider.carbonChat().userManager().user(onlinePlayer.getUniqueId()).getNow(null);
+                        if (carbonPlayer.ignoring(((EntitySongPlayer) songPlayer).getEntity().getUniqueId())) {
+                            songPlayer.removePlayer(onlinePlayer);
+                        }
                     }
                 }
             }, 10L, 10);
