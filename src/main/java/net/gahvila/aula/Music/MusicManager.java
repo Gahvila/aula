@@ -206,4 +206,13 @@ public class MusicManager {
             default -> 50;
         };
     }
+
+    public String songLength(Song song) {
+        float lengthInSeconds = song.getLength() / song.getSpeed();
+
+        int minutes = (int) (lengthInSeconds / 60);
+        int seconds = (int) (lengthInSeconds % 60);
+
+        return String.format("%d:%02d", minutes, seconds);
+    }
 }

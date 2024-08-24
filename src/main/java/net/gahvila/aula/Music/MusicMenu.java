@@ -86,7 +86,7 @@ public class MusicMenu {
                 ItemMeta meta = item.getItemMeta();
                 meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, song.getTitle());
                 meta.displayName(toUndecoratedMM("<white>" + song.getTitle()));
-                meta.lore(List.of(toUndecoratedMM("<gray>" + song.getOriginalAuthor())));
+                meta.lore(List.of(toUndecoratedMM("<gray>" + song.getOriginalAuthor()), toUndecoratedMM("<gray>" + musicManager.songLength(song))));
                 JukeboxPlayableComponent component = meta.getJukeboxPlayable();
                 component.setShowInTooltip(false);
                 meta.setJukeboxPlayable(component);
