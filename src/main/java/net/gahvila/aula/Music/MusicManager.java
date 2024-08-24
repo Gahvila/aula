@@ -84,7 +84,7 @@ public class MusicManager {
 
     //AUTO PLAY
     public boolean getAutoEnabled(Player player) {
-        return autoEnabled.get(player) != null && autoEnabled.get(player);
+        return autoEnabled.get(player);
     }
 
     public void setAutoEnabled(Player player, boolean option) {
@@ -99,6 +99,10 @@ public class MusicManager {
     public boolean getSavedAutoState(Player player) {
         Json playerData = new Json("playerdata.json", instance.getDataFolder() + "/data/");
         String uuid = player.getUniqueId().toString();
+
+        if (!playerData.contains(uuid + "." + "radioState")) {
+            return true;
+        }
         return playerData.getBoolean(uuid + "." + "radioState");
     }
 
