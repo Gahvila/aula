@@ -30,6 +30,8 @@ public class MusicManager {
     public static HashMap<Player, SongPlayer> songPlayers = new HashMap<>();
     public static HashMap<Player, Boolean> speakerEnabled = new HashMap<>();
     public static HashMap<Player, Boolean> autoEnabled = new HashMap<>();
+    public static HashMap<Player, Integer> playerVolume = new HashMap<>();
+
 
 
     public void loadSongs() {
@@ -79,7 +81,6 @@ public class MusicManager {
     public void setSpeakerEnabled(Player player, boolean option) {
         speakerEnabled.put(player, option);
     }
-    //
 
     //AUTO PLAY
     public boolean getAutoEnabled(Player player) {
@@ -98,9 +99,44 @@ public class MusicManager {
     public boolean getSavedAutoState(Player player) {
         Json playerData = new Json("playerdata.json", instance.getDataFolder() + "/data/");
         String uuid = player.getUniqueId().toString();
-        return playerData.getFileData().containsKey(uuid + "." + "radioState");
+        return playerData.getBoolean(uuid + "." + "radioState");
     }
 
+    //VOLUME SELECTOR
+    public int getVolume(Player player) {
+        return playerVolume.getOrDefault(player, 5);
+    }
+
+    public void setVolume(Player player, int volume) {
+        if (volume >= 10) {
+            playerVolume.put(player, 10);
+        } else playerVolume.put(player, Math.max(volume, 1));
+    }
+
+    public void increaseVolume(Player player) {
+        setVolume(player, getVolume(player) + 1);
+    }
+
+    public void reduceVolume(Player player) {
+        setVolume(player, getVolume(player) - 1);
+    }
+
+    public void saveVolume(Player player) {
+        Json playerData = new Json("playerdata.json", instance.getDataFolder() + "/data/");
+        String uuid = player.getUniqueId().toString();
+        playerData.set(uuid + "." + "volume", getVolume(player));
+    }
+    public int getSavedVolume(Player player) {
+        Json playerData = new Json("playerdata.json", instance.getDataFolder() + "/data/");
+        String uuid = player.getUniqueId().toString();
+
+        if (!playerData.contains(uuid + "." + "volume")) {
+            return 5;
+        }
+        return playerData.getInt(uuid + "." + "volume");
+    }
+
+    //
 
     public void songPlayerSchedule(Player player, SongPlayer songPlayer) {
         double length = songPlayer.getSong().getLength();
@@ -153,5 +189,21 @@ public class MusicManager {
                 }
             }, 10L, 10);
         }
+    }
+
+    public byte volumeConverter(int volume) {
+        return switch(volume) {
+            case 1 -> (byte) 10;
+            case 2 -> (byte) 20;
+            case 3 -> (byte) 30;
+            case 4 -> (byte) 40;
+            case 5 -> (byte) 50;
+            case 6 -> (byte) 60;
+            case 7 -> (byte) 70;
+            case 8 -> (byte) 80;
+            case 9 -> (byte) 90;
+            case 10 -> (byte) 100;
+            default -> 50;
+        };
     }
 }

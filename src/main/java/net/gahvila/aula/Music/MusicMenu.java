@@ -237,6 +237,40 @@ public class MusicMenu {
             gui.update();
         }), 3, 0);
 
+        ItemStack volume = new ItemStack(Material.BELL);
+        ItemMeta volumeMeta = volume.getItemMeta();
+        volumeMeta.displayName(toUndecoratedMM("<b>Volyymi</b>: <yellow>" + musicManager.getVolume(player) + "</yellow><gray>/</gray><yellow>10</yellow>"));
+        volumeMeta.lore(List.of(toUndecoratedMM("<white>Vasen: <yellow>nosta"), toUndecoratedMM("<white>Oikea: <yellow>laske")));
+        volume.setItemMeta(volumeMeta);
+        navigationPane.addItem(new GuiItem(volume, event -> {
+            if (cooldown.contains(player)) return;
+            cooldown.add(player);
+            Bukkit.getScheduler().runTaskLater(instance, () -> cooldown.remove(player), 2);
+
+            if (musicManager.getSpeakerEnabled(player)){
+                player.sendRichMessage("<red>Äänenvoimakkuuden säätö ei ole käytössä kaiutintilassa!");
+            }
+
+            if (event.isLeftClick()) {
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 0.8F);
+                musicManager.increaseVolume(player);
+            } else if (event.isRightClick()) {
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8F, 0.7F);
+                musicManager.reduceVolume(player);
+            }
+
+            if (musicManager.getSongPlayer(player) != null) {
+                SongPlayer sp = musicManager.getSongPlayer(player);
+                if (sp instanceof RadioSongPlayer){
+                    sp.setVolume(musicManager.volumeConverter(musicManager.getVolume(player)));
+                }
+            }
+
+            volumeMeta.displayName(toUndecoratedMM("<b>Volyymi</b>: <yellow>" + musicManager.getVolume(player) + "</yellow><gray>/</gray><yellow>10</yellow>"));
+            volume.setItemMeta(volumeMeta);
+            gui.update();
+        }), 4, 0);
+
         ItemStack previous = new ItemStack(Material.MANGROVE_BUTTON);
         ItemMeta previousMeta = previous.getItemMeta();
         previousMeta.displayName(toUndecoratedMM("<b>Takaisin"));
@@ -271,7 +305,7 @@ public class MusicMenu {
         Playlist playlist = new Playlist(song);
         RadioSongPlayer rsp = new RadioSongPlayer(playlist);
         rsp.setChannelMode(new MonoStereoMode());
-        rsp.setVolume((byte) 45);
+        rsp.setVolume(musicManager.volumeConverter(musicManager.getVolume(player)));
         rsp.addPlayer(player);
         if (tick != null){
             rsp.setTick(tick);

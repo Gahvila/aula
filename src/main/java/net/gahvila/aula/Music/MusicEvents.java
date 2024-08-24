@@ -25,6 +25,7 @@ public class MusicEvents implements Listener {
         Player player = event.getPlayer();
         musicManager.setSpeakerEnabled(player, false);
         musicManager.setAutoEnabled(player, musicManager.getSavedAutoState(player));
+        musicManager.setVolume(player, musicManager.getSavedVolume(player));
     }
 
     @EventHandler
@@ -32,9 +33,11 @@ public class MusicEvents implements Listener {
         Player player = event.getPlayer();
         musicManager.clearSongPlayer(player);
         musicManager.saveAutoState(player);
+        musicManager.saveVolume(player);
 
         MusicManager.speakerEnabled.remove(player);
         MusicManager.autoEnabled.remove(player);
+        MusicManager.playerVolume.remove(player);
     }
 
     @EventHandler
