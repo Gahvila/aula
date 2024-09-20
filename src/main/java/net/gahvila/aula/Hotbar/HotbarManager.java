@@ -1,6 +1,6 @@
 package net.gahvila.aula.Hotbar;
 
-import net.gahvila.aula.Utils.WorldGuardRegionChecker;
+import net.gahvila.gahvilacore.API.Utils.WorldGuardRegionChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.HashMap;
 
 import static net.gahvila.aula.Aula.instance;
-import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
+import static net.gahvila.gahvilacore.API.Utils.MiniMessageUtils.toUndecoratedMM;
 
 public class HotbarManager {
 

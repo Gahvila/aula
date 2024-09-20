@@ -2,18 +2,15 @@ package net.gahvila.aula.General.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import net.gahvila.aula.Hotbar.HotbarManager;
-import net.gahvila.aula.Music.MusicManager;
 import net.gahvila.aula.Teleport.TeleportManager;
 
 public class AulaAdminCommand {
 
     private final TeleportManager teleportManager;
-    private final MusicManager musicManager;
     private final HotbarManager hotbarManager;
 
-    public AulaAdminCommand(TeleportManager teleportManager, MusicManager musicManager, HotbarManager hotbarManager) {
+    public AulaAdminCommand(TeleportManager teleportManager, HotbarManager hotbarManager) {
         this.teleportManager = teleportManager;
-        this.musicManager = musicManager;
         this.hotbarManager = hotbarManager;
     }
 
@@ -29,11 +26,6 @@ public class AulaAdminCommand {
                         .executesPlayer((p, args) -> {
                             teleportManager.saveTeleport("spawn", p.getLocation());
                             p.sendMessage("Asetit spawnin uuden sijainnin.");
-                        }))
-                .withSubcommand(new CommandAPICommand("musicreload")
-                        .executesPlayer((p, args) -> {
-                            musicManager.loadSongs();
-                            p.sendMessage("Ladattu musiikit uudelleen.");
                         }))
                 .register();
     }

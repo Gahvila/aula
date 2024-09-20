@@ -14,13 +14,12 @@ repositories {
     maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
     maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
     maven { url = uri("https://jitpack.io") }
-    maven { url = uri("https://maven.enginehub.org/repo/") }
     maven { url = uri("https://repo.fancyplugins.de/releases") }
 }
 
 dependencies {
+    compileOnly("net.gahvila:GahvilaCore:2.0")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
-    compileOnly ("com.sk89q.worldguard:worldguard-bukkit:7.0.10")
     compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
     implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
     implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.17")

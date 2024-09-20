@@ -1,5 +1,6 @@
 package net.gahvila.aula.Utils;
 
+import net.gahvila.gahvilacore.API.Utils.MiniMessageUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.gahvila.aula.Aula.instance;
-import static net.gahvila.aula.Utils.MiniMessageUtils.toUndecoratedMM;
+import static net.gahvila.gahvilacore.API.Utils.MiniMessageUtils.toUndecoratedMM;
 
 public class MenuItemCreator {
 

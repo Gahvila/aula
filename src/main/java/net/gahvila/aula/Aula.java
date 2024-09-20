@@ -9,10 +9,6 @@ import net.gahvila.aula.General.Events.PlayerJoin;
 import net.gahvila.aula.General.Events.PlayerLeave;
 import net.gahvila.aula.Hotbar.HotbarEvent;
 import net.gahvila.aula.Hotbar.HotbarManager;
-import net.gahvila.aula.Music.MusicCommand;
-import net.gahvila.aula.Music.MusicEvents;
-import net.gahvila.aula.Music.MusicManager;
-import net.gahvila.aula.Music.MusicMenu;
 import net.gahvila.aula.Profile.ProfileCommand;
 import net.gahvila.aula.Profile.ProfileMenu;
 import net.gahvila.aula.ServerSelector.ServerSelectorCommand;
@@ -51,14 +47,6 @@ public final class Aula extends JavaPlugin {
         //commandapi
         CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true));
 
-        //music
-        MusicManager musicManager = new MusicManager();
-        MusicMenu musicMenu = new MusicMenu(musicManager);
-        musicManager.loadSongs();
-        MusicCommand musicCommand = new MusicCommand(musicMenu);
-        musicCommand.registerCommands();
-        registerListeners(new MusicEvents(musicManager));
-
         //hotbar
         HotbarManager hotbarManager = new HotbarManager();
         registerListeners(new HotbarEvent(hotbarManager));
@@ -82,7 +70,7 @@ public final class Aula extends JavaPlugin {
         FileserverCommand fileserverCommand = new FileserverCommand();
         fileserverCommand.registerCommands();
 
-        AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, musicManager, hotbarManager);
+        AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, hotbarManager);
         aulaAdminCommand.registerCommands();
 
         SpawnCommand spawnCommand = new SpawnCommand(teleportManager);
