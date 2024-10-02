@@ -21,7 +21,7 @@ dependencies {
     compileOnly("net.gahvila:GahvilaCore:2.0")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
     compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
-    implementation ("com.github.DaJokni:simplixstorage:-SNAPSHOT")
+    implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
     implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.17")
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 
@@ -56,7 +56,7 @@ tasks {
         archiveFileName.set("${rootProject.name}-${version}.jar")
         dependencies {
             include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.3"))
-            include(dependency("com.github.DaJokni:simplixstorage:-SNAPSHOT"))
+            include(dependency("com.github.simplix-softworks:simplixstorage:3.2.7"))
             include(dependency("com.github.stefvanschie.inventoryframework:IF:0.10.17"))
         }
         relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
