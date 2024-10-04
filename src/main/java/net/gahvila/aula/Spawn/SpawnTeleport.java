@@ -1,6 +1,6 @@
 package net.gahvila.aula.Spawn;
 
-import net.gahvila.aula.Teleport.TeleportManager;
+import net.gahvila.gahvilacore.Teleport.TeleportManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

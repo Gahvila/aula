@@ -1,7 +1,7 @@
 package net.gahvila.aula.Spawn;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import net.gahvila.aula.Teleport.TeleportManager;
+import net.gahvila.gahvilacore.Teleport.TeleportManager;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 
