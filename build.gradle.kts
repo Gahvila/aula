@@ -3,6 +3,12 @@ plugins {
     `maven-publish`
     id("io.github.goooler.shadow") version "8.1.7"
 }
+
+group = "net.gahvila"
+version = findProperty("version")!!
+description = "Aula"
+java.sourceCompatibility = JavaVersion.VERSION_21
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
@@ -31,11 +37,6 @@ dependencies {
     annotationProcessor("dev.jorel:commandapi-annotations:9.6.1")
 }
 
-group = "Aula"
-version = "3.1"
-description = "Aula"
-java.sourceCompatibility = JavaVersion.VERSION_21
-
 publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
@@ -43,19 +44,11 @@ publishing {
 }
 
 tasks {
-    processResources {
-        val props = mapOf("version" to project.version)
-        inputs.properties(props)
-        filteringCharset = "UTF-8"
-        filesMatching("paper-plugin.yml") {
-            expand(props)
-        }
-    }
-    compileJava {
-        options.release = 21
-    }
     withType<JavaCompile> {
         options.encoding = "UTF-8"
+    }
+    build {
+        dependsOn(shadowJar)
     }
     assemble {
         dependsOn(shadowJar)
@@ -65,5 +58,8 @@ tasks {
         relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
         relocate("de.leonhard.storage", "net.gahvila.aula.shaded.storage")
         relocate ("com.github.stefvanschie.inventoryframework", "net.gahvila.aula.shaded.inventoryframework")
+    }
+    processResources {
+        expand(project.properties)
     }
 }
