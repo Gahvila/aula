@@ -18,13 +18,21 @@ import net.gahvila.aula.Spawn.SpawnTeleport;
 import net.gahvila.aula.Utils.EmptyChunkGenerator;
 import net.gahvila.gahvilacore.Teleport.TeleportManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.Month;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import static net.gahvila.gahvilacore.Utils.MiniMessageUtils.toMM;
 
 public final class Aula extends JavaPlugin {
 
@@ -66,6 +74,7 @@ public final class Aula extends JavaPlugin {
         TeleportManager teleportManager = new TeleportManager();
 
         timeSyncScheduler();
+        coldScheduler();
 
         FileserverCommand fileserverCommand = new FileserverCommand();
         fileserverCommand.registerCommands();
@@ -96,5 +105,21 @@ public final class Aula extends JavaPlugin {
             long time = (1000 * cal.get(Calendar.HOUR_OF_DAY)) + (16 * cal.get(Calendar.MINUTE)) - 6000;
             Bukkit.getWorld("world").setTime(time);
         }, 0L, 200);
+    }
+
+    public void coldScheduler() {
+        Location location = new Location(Bukkit.getWorld("world"), -27.0, 77.5, -24.0);
+        Bukkit.getServer().getScheduler().runTaskTimer(instance, () -> {
+            Month currentMonth = ZonedDateTime.now().getMonth();
+            if (currentMonth == Month.NOVEMBER || currentMonth == Month.DECEMBER || currentMonth == Month.JANUARY) {
+                Bukkit.getWorld("world").spawnParticle(
+                        Particle.CAMPFIRE_COSY_SMOKE,
+                        location,
+                        10,
+                        0, 1, 0,
+                        0.05
+                );
+            }
+        }, 0L, 20);
     }
 }
