@@ -20,21 +20,19 @@ repositories {
     maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
     maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
     maven { url = uri("https://jitpack.io") }
-    maven { url = uri("https://repo.fancyplugins.de/releases") }
 }
 
 dependencies {
     compileOnly("net.gahvila:GahvilaCore:2.0")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
-    compileOnly ("com.github.koca2000:NoteBlockAPI:1.6.2")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
-    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.18")
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    implementation ("com.github.stefvanschie.inventoryframework:IF-Paper:0.11.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
     //commandapi
-    compileOnly("dev.jorel:commandapi-annotations:9.6.1")
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1")
-    annotationProcessor("dev.jorel:commandapi-annotations:9.6.1")
+    compileOnly("dev.jorel:commandapi-annotations:9.7.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
+    annotationProcessor("dev.jorel:commandapi-annotations:9.7.0")
 }
 
 publishing {
