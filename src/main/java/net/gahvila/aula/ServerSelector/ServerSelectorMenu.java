@@ -1,11 +1,11 @@
 package net.gahvila.aula.ServerSelector;
 
-import com.github.stefvanschie.inventoryframework.adventuresupport.ComponentHolder;
-import com.github.stefvanschie.inventoryframework.gui.GuiItem;
-import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
-import com.github.stefvanschie.inventoryframework.pane.Pane;
-import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import net.gahvila.inventoryframework.adventuresupport.ComponentHolder;
+import net.gahvila.inventoryframework.gui.GuiItem;
+import net.gahvila.inventoryframework.gui.type.ChestGui;
+import net.gahvila.inventoryframework.pane.OutlinePane;
+import net.gahvila.inventoryframework.pane.Pane;
+import net.gahvila.inventoryframework.pane.StaticPane;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Material;

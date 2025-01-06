@@ -16,17 +16,19 @@ repositories {
     mavenLocal()
     mavenCentral()
     gradlePluginPortal()
-    maven{ url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
-    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
-    maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
-    maven { url = uri("https://jitpack.io") }
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://repo.gahvila.net/snapshots/")
+    maven("https://jitpack.io")
+
 }
 
 dependencies {
-    compileOnly("net.gahvila:GahvilaCore:2.0")
+    implementation("net.gahvila:gahvilacore:2.1-SNAPSHOT")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
+    implementation("net.gahvila:inventoryframework:0.11.1-SNAPSHOT")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
-    implementation ("com.github.stefvanschie.inventoryframework:IF-Paper:0.11.1-SNAPSHOT")
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
     //commandapi
@@ -55,7 +57,7 @@ tasks {
         archiveFileName.set("${rootProject.name}-${version}.jar")
         relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
         relocate("de.leonhard.storage", "net.gahvila.aula.shaded.storage")
-        relocate ("com.github.stefvanschie.inventoryframework", "net.gahvila.aula.shaded.inventoryframework")
+        relocate ("net.gahvila.inventoryframework", "net.gahvila.aula.shaded.inventoryframework")
     }
     processResources {
         expand(project.properties)
