@@ -25,16 +25,16 @@ repositories {
 }
 
 dependencies {
-    implementation("net.gahvila:gahvilacore:2.1-SNAPSHOT")
+    implementation("net.gahvila:gahvilacore:2.2-SNAPSHOT")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
     implementation("net.gahvila:inventoryframework:0.11.1-SNAPSHOT")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
 
     //commandapi
-    compileOnly("dev.jorel:commandapi-annotations:9.7.0")
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
-    annotationProcessor("dev.jorel:commandapi-annotations:9.7.0")
+    compileOnly("dev.jorel:commandapi-annotations:10.0.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.0")
+    annotationProcessor("dev.jorel:commandapi-annotations:10.0.0")
 }
 
 publishing {

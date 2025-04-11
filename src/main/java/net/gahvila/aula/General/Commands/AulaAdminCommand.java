@@ -1,7 +1,9 @@
 package net.gahvila.aula.General.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
+import net.gahvila.aula.Aula;
 import net.gahvila.aula.Hotbar.HotbarManager;
+import net.gahvila.gahvilacore.GahvilaCore;
 import net.gahvila.gahvilacore.Teleport.TeleportManager;
 
 public class AulaAdminCommand {
@@ -17,6 +19,10 @@ public class AulaAdminCommand {
     public void registerCommands() {
         new CommandAPICommand("adminaula")
                 .withPermission("aula.admin")
+                .withSubcommand(new CommandAPICommand("debug")
+                        .executesPlayer((p, args) -> {
+                            p.sendMessage(String.valueOf(GahvilaCore.instance));
+                        }))
                 .withSubcommand(new CommandAPICommand("togglehotbar")
                         .executesPlayer((p, args) -> {
                             hotbarManager.setHotbarEnabled(p);
@@ -24,7 +30,7 @@ public class AulaAdminCommand {
                         }))
                 .withSubcommand(new CommandAPICommand("setspawn")
                         .executesPlayer((p, args) -> {
-                            teleportManager.saveTeleport("spawn", p.getLocation());
+                            teleportManager.saveTeleport(Aula.instance,"spawn", p.getLocation());
                             p.sendMessage("Asetit spawnin uuden sijainnin.");
                         }))
                 .register();

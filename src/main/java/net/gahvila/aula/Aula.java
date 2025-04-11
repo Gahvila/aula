@@ -38,7 +38,6 @@ public final class Aula extends JavaPlugin {
 
     public static Aula instance;
     private PluginManager pluginManager;
-    private TeleportManager teleportManager;
 
     @Override
     public void onEnable() {
@@ -46,8 +45,8 @@ public final class Aula extends JavaPlugin {
         //managers
         pluginManager = Bukkit.getPluginManager();
         instance = this;
-        teleportManager = new TeleportManager();
 
+        TeleportManager teleportManager = new TeleportManager();
 
         registerListeners(new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
                 new PlayerDamage());
@@ -71,7 +70,6 @@ public final class Aula extends JavaPlugin {
         profileCommand.registerCommands();
 
         //general
-        TeleportManager teleportManager = new TeleportManager();
 
         timeSyncScheduler();
         coldScheduler();
