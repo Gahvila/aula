@@ -1,5 +1,7 @@
 package net.gahvila.aula.Hotbar;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import net.gahvila.gahvilacore.Utils.WorldGuardRegionChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -46,6 +48,8 @@ public class HotbarManager {
                 meta.setOwningPlayer(player);
                 temppa.setItemMeta(meta);
             }
+            temppa.setData(DataComponentTypes.TOOLTIP_DISPLAY,
+                    TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.JUKEBOX_PLAYABLE).build());
             player.getInventory().setItem(i, temppa);
         }
         currentHotbar.put(player, hotbarType);
@@ -57,6 +61,8 @@ public class HotbarManager {
         itemMeta.addItemFlags(ItemFlag.values());
         itemMeta.displayName(toUndecoratedMM(name));
         item.setItemMeta(itemMeta);
+        item.setData(DataComponentTypes.TOOLTIP_DISPLAY,
+                TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.JUKEBOX_PLAYABLE).build());
         return item;
     }
 

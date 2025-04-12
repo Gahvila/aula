@@ -27,7 +27,7 @@ repositories {
 dependencies {
     implementation("net.gahvila:gahvilacore:2.2-SNAPSHOT")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
-    implementation("net.gahvila:inventoryframework:0.11.1-SNAPSHOT")
+    implementation("net.gahvila:inventoryframework:0.11.2-SNAPSHOT")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
     compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
 
