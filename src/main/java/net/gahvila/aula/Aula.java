@@ -13,15 +13,11 @@ import net.gahvila.aula.Profile.ProfileCommand;
 import net.gahvila.aula.Profile.ProfileMenu;
 import net.gahvila.aula.ServerSelector.ServerSelectorCommand;
 import net.gahvila.aula.ServerSelector.ServerSelectorMenu;
-import net.gahvila.aula.Spawn.SpawnCommand;
-import net.gahvila.aula.Spawn.SpawnTeleport;
 import net.gahvila.aula.Utils.EmptyChunkGenerator;
 import net.gahvila.gahvilacore.Teleport.TeleportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
@@ -48,8 +44,7 @@ public final class Aula extends JavaPlugin {
 
         TeleportManager teleportManager = new TeleportManager();
 
-        registerListeners(new PlayerJoin(), new PlayerLeave(), new SpawnTeleport(teleportManager),
-                new PlayerDamage());
+        registerListeners(new PlayerJoin(), new PlayerLeave(), new PlayerDamage());
 
         //commandapi
         CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true));
@@ -80,8 +75,6 @@ public final class Aula extends JavaPlugin {
         AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, hotbarManager);
         aulaAdminCommand.registerCommands();
 
-        SpawnCommand spawnCommand = new SpawnCommand(teleportManager);
-        spawnCommand.registerCommands();
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
