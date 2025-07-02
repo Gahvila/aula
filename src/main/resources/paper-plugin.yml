@@ -6,8 +6,6 @@ authors: [ Jokni ]
 api-version: '1.21'
 dependencies:
   server:
-    NoteBlockAPI:
-      required: true
     WorldGuard:
       required: true
     GahvilaCore:

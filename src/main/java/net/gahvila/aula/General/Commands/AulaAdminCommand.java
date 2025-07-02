@@ -28,11 +28,6 @@ public class AulaAdminCommand {
                             hotbarManager.setHotbarEnabled(p);
                             p.sendMessage("Hotbar: " + hotbarManager.getHotbarEnabled(p));
                         }))
-                .withSubcommand(new CommandAPICommand("setspawn")
-                        .executesPlayer((p, args) -> {
-                            teleportManager.saveTeleport(Aula.instance,"spawn", p.getLocation());
-                            p.sendMessage("Asetit spawnin uuden sijainnin.");
-                        }))
                 .register();
     }
 }
