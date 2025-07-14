@@ -16,7 +16,7 @@ public class ServerSelectorCommand {
                 .withAliases("palvelinvalikko")
                 .executesPlayer((p, args) -> {
                     p.playSound(p.getLocation(), Sound.ENTITY_LLAMA_SWAG, 0.6F, 1F);
-                    serverSelectorMenu.showGUI(p);
+                    serverSelectorMenu.show(p);
                 })
                 .register();
     }
