@@ -1,7 +1,5 @@
 package net.gahvila.aula;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.gahvila.aula.General.Commands.AulaAdminCommand;
 import net.gahvila.aula.General.Commands.FileserverCommand;
 import net.gahvila.aula.General.Events.PlayerDamage;
@@ -42,12 +40,7 @@ public final class Aula extends JavaPlugin {
         pluginManager = Bukkit.getPluginManager();
         instance = this;
 
-        TeleportManager teleportManager = new TeleportManager();
-
         registerListeners(new PlayerJoin(), new PlayerLeave(), new PlayerDamage());
-
-        //commandapi
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true));
 
         //hotbar
         HotbarManager hotbarManager = new HotbarManager();
@@ -57,12 +50,12 @@ public final class Aula extends JavaPlugin {
         //serverselector
         ServerSelectorMenu serverSelectorMenu = new ServerSelectorMenu();
         ServerSelectorCommand serverSelectorCommand = new ServerSelectorCommand(serverSelectorMenu);
-        serverSelectorCommand.registerCommands();
+        serverSelectorCommand.registerCommands(this);
 
         //profile
         ProfileMenu profileMenu = new ProfileMenu();
         ProfileCommand profileCommand = new ProfileCommand(profileMenu);
-        profileCommand.registerCommands();
+        profileCommand.registerCommands(this);
 
         //general
 
@@ -70,10 +63,10 @@ public final class Aula extends JavaPlugin {
         coldScheduler();
 
         FileserverCommand fileserverCommand = new FileserverCommand();
-        fileserverCommand.registerCommands();
+        fileserverCommand.registerCommands(this);
 
-        AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(teleportManager, hotbarManager);
-        aulaAdminCommand.registerCommands();
+        AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(hotbarManager);
+        aulaAdminCommand.registerCommands(this);
 
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

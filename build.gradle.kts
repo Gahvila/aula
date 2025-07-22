@@ -29,12 +29,7 @@ dependencies {
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
     implementation("net.gahvila:inventoryframework:0.11.2-SNAPSHOT")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
-    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
-
-    //commandapi
-    compileOnly("dev.jorel:commandapi-annotations:10.1.1")
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.1.1")
-    annotationProcessor("dev.jorel:commandapi-annotations:10.1.1")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
 }
 
 publishing {
