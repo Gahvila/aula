@@ -50,7 +50,6 @@ tasks {
     }
     shadowJar {
         archiveFileName.set("${rootProject.name}-${version}.jar")
-        relocate("dev.jorel.commandapi", "net.gahvila.aula.shaded.commandapi")
         relocate("de.leonhard.storage", "net.gahvila.aula.shaded.storage")
         relocate ("net.gahvila.inventoryframework", "net.gahvila.aula.shaded.inventoryframework")
     }
