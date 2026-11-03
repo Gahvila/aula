@@ -1,16 +1,16 @@
 plugins {
     java
     `maven-publish`
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("com.gradleup.shadow") version "9.4.1"
 }
 
 group = "net.gahvila"
 version = findProperty("version")!!
 description = "Aula"
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_25
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 repositories {
     mavenLocal()
@@ -25,11 +25,11 @@ repositories {
 }
 
 dependencies {
-    implementation("net.gahvila:gahvilacore:2.3-SNAPSHOT")
+    compileOnly("net.gahvila:gahvilacore:3.0-SNAPSHOT")
     compileOnly("de.hexaoxi:carbonchat-api:3.0.0-beta.27")
     implementation("net.gahvila:inventoryframework:0.11.2-SNAPSHOT")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.7")
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.74-stable")
 }
 
 publishing {

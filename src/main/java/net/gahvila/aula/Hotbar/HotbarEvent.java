@@ -1,5 +1,6 @@
 package net.gahvila.aula.Hotbar;
 
+import net.gahvila.gahvilacore.GahvilaCore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,14 +42,14 @@ public class HotbarEvent implements Listener {
                     } else if (slot == 4) {
                         player.performCommand("serverselector");
                     } else if (slot == 7) {
-                        player.performCommand("music");
+                        GahvilaCore.getInstance().openMusicMenu(player);
                     }
                     break;
                 case SPAWN:
                     if (slot == 1) {
                         player.performCommand("profile");
                     } else if (slot == 7) {
-                        player.performCommand("music");
+                        GahvilaCore.getInstance().openMusicMenu(player);
                     }
                     break;
                 case PARKOUR:

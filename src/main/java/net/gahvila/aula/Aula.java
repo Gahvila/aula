@@ -7,15 +7,13 @@ import net.gahvila.aula.General.Events.PlayerJoin;
 import net.gahvila.aula.General.Events.PlayerLeave;
 import net.gahvila.aula.Hotbar.HotbarEvent;
 import net.gahvila.aula.Hotbar.HotbarManager;
-import net.gahvila.aula.Profile.ProfileCommand;
-import net.gahvila.aula.Profile.ProfileMenu;
 import net.gahvila.aula.ServerSelector.ServerSelectorCommand;
 import net.gahvila.aula.ServerSelector.ServerSelectorMenu;
 import net.gahvila.aula.Utils.EmptyChunkGenerator;
-import net.gahvila.gahvilacore.Teleport.TeleportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
@@ -25,8 +23,6 @@ import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import static net.gahvila.gahvilacore.Utils.MiniMessageUtils.toMM;
 
 public final class Aula extends JavaPlugin {
 
@@ -40,6 +36,7 @@ public final class Aula extends JavaPlugin {
         pluginManager = Bukkit.getPluginManager();
         instance = this;
 
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         registerListeners(new PlayerJoin(), new PlayerLeave(), new PlayerDamage());
 
         //hotbar
@@ -52,13 +49,7 @@ public final class Aula extends JavaPlugin {
         ServerSelectorCommand serverSelectorCommand = new ServerSelectorCommand(serverSelectorMenu);
         serverSelectorCommand.registerCommands(this);
 
-        //profile
-        ProfileMenu profileMenu = new ProfileMenu();
-        ProfileCommand profileCommand = new ProfileCommand(profileMenu);
-        profileCommand.registerCommands(this);
-
         //general
-
         timeSyncScheduler();
         coldScheduler();
 
@@ -67,13 +58,15 @@ public final class Aula extends JavaPlugin {
 
         AulaAdminCommand aulaAdminCommand = new AulaAdminCommand(hotbarManager);
         aulaAdminCommand.registerCommands(this);
-
-
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
-    private void registerListeners(Listener...listeners){
-        for(Listener listener : listeners){
+    @Override
+    public void onDisable() {
+        getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+    }
+
+    private void registerListeners(Listener... listeners) {
+        for (Listener listener : listeners) {
             pluginManager.registerEvents(listener, this);
         }
     }
@@ -86,9 +79,15 @@ public final class Aula extends JavaPlugin {
     public void timeSyncScheduler() {
         Bukkit.getServer().getScheduler().runTaskTimer(instance, () -> {
             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Helsinki"));
-            long time = (1000 * cal.get(Calendar.HOUR_OF_DAY)) + (16 * cal.get(Calendar.MINUTE)) - 6000;
-            Bukkit.getWorld("world").setTime(time);
-        }, 0L, 200);
+            long time = (1000L * cal.get(Calendar.HOUR_OF_DAY)) + (16L * cal.get(Calendar.MINUTE)) - 6000L;
+            if (time < 0) {
+                time += 24000L;
+            }
+            World world = Bukkit.getWorld("world");
+            if (world != null) {
+                world.setTime(time);
+            }
+        }, 0L, 200L);
     }
 
     public void coldScheduler() {
@@ -96,14 +95,17 @@ public final class Aula extends JavaPlugin {
         Bukkit.getServer().getScheduler().runTaskTimer(instance, () -> {
             Month currentMonth = ZonedDateTime.now().getMonth();
             if (currentMonth == Month.NOVEMBER || currentMonth == Month.DECEMBER || currentMonth == Month.JANUARY) {
-                Bukkit.getWorld("world").spawnParticle(
-                        Particle.CAMPFIRE_COSY_SMOKE,
-                        location,
-                        10,
-                        0, 1, 0,
-                        0.05
-                );
+                World world = Bukkit.getWorld("world");
+                if (world != null) {
+                    world.spawnParticle(
+                            Particle.CAMPFIRE_COSY_SMOKE,
+                            location,
+                            10,
+                            0, 1, 0,
+                            0.05
+                    );
+                }
             }
-        }, 0L, 20);
+        }, 0L, 20L);
     }
 }
